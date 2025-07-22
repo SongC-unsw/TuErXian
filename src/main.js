@@ -4,12 +4,7 @@ import { createApp } from "vue";
 import { createPinia } from "pinia";
 
 import App from "./App.vue";
-import router from "./router";
-import { getCategory } from "@/apis/testAPI";
-
-getCategory().then((res) => {
-  console.log(res);
-});
+import router from "./router/index.js";
 
 const app = createApp(App);
 
