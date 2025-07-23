@@ -39,6 +39,12 @@ const router = createRouter({
       component: NotFound,
     },
   ],
+  scrollBehavior() {
+    return {
+      top: 0,
+      behavior: "smooth", // 平滑滚动更高级
+    };
+  },
 });
 
 export default router;
