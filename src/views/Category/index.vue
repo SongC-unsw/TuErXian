@@ -1,29 +1,12 @@
 <script setup>
-import { getCategoryAPI } from "@/apis/category";
-import { getBannerAPI } from "@/apis/home";
-import { onMounted, ref } from "vue";
-import { useRoute, onBeforeRouteUpdate } from "vue-router";
+import { useBanner } from "./composables/useBanner";
 import GoodsItem from "@/views/Home/components/GoodsItem.vue";
-const route = useRoute();
-const categoryList = ref({});
-const getCategory = async (id = route.params.id) => {
-  const res = await getCategoryAPI(id);
-  categoryList.value = res.result;
-};
-onMounted(() => getCategory());
+import { useCategory } from "./composables/useCategory";
+//获取分类列表
+const { categoryList } = useCategory();
 // 获取banner
-const bannerList = ref([]);
-
+const { bannerList } = useBanner();
 // optimized: when params change, only change a particular part of the page
-onBeforeRouteUpdate((to, from) => {
-  console.log("Changed");
-  //变化之后的路由参数
-  getCategory(to.params.id);
-});
-onMounted(async () => {
-  const res = await getBannerAPI({ distributionSite: "2" });
-  bannerList.value = res.result;
-});
 </script>
 
 <template>
