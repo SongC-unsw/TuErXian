@@ -1,6 +1,7 @@
 <script setup>
 import { useScroll } from "@vueuse/core";
 import { ArrowUpToLine } from "lucide-vue-next";
+import { useCategoryStore } from "@/stores/category";
 const { y } = useScroll(window);
 const gotoTop = () => {
   window.scrollTo({
@@ -8,6 +9,8 @@ const gotoTop = () => {
     behavior: "smooth",
   });
 };
+// 使用Pinia中的数据
+const categoryStore = useCategoryStore();
 </script>
 
 <template>
@@ -16,35 +19,8 @@ const gotoTop = () => {
       <RouterLink class="logo" to="/" />
       <!-- 导航区域 -->
       <ul class="app-header-nav">
-        <li class="home">
-          <RouterLink to="/">首页</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">居家</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">美食</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">服饰</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">母婴</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">个护</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">严选</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">数码</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">运动</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">杂项</RouterLink>
+        <li class="home" v-for="item in categoryStore.categoryList" :key="item.id">
+          <RouterLink to="/">{{ item.name }}</RouterLink>
         </li>
       </ul>
 
