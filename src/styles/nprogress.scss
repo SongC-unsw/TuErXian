@@ -1,0 +1,15 @@
+#nprogress .bar {
+  background: $xtxColor !important;
+
+  height: 3px !important;
+}
+
+#nprogress .peg {
+  box-shadow:
+    0 0 10px $xtxColor,
+    0 0 5px $xtxColor;
+}
+
+#nprogress .spinner {
+  display: none;
+}

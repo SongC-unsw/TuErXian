@@ -2,6 +2,9 @@ import { createRouter, createWebHistory } from "vue-router";
 // createRouter 创建路由实例
 // createWebHistory 创建历史记录
 // routes 路由配置
+// Nprogress 进度条
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 import Login from "@/views/Login/index.vue";
 import Layout from "@/views/Layout/index.vue";
 import Home from "@/views/Home/index.vue";
@@ -9,6 +12,16 @@ import Category from "@/views/Category/index.vue";
 import NotFound from "@/views/NotFound/index.vue";
 import SubCategory from "@/views/SubCategory/index.vue";
 import Detail from "@/views/Detail/index.vue";
+
+NProgress.configure({
+  easing: "ease",
+  speed: 500,
+  showSpinner: false,
+  minimum: 0.2,
+  trickleSpeed: 200,
+  parent: "body",
+});
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -52,4 +65,14 @@ const router = createRouter({
   },
 });
 
+router.beforeEach((to, from, next) => {
+  NProgress.start();
+  next();
+});
+router.afterEach(() => {
+  NProgress.done();
+});
+router.onError(() => {
+  NProgress.done();
+});
 export default router;
