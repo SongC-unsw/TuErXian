@@ -1,5 +1,6 @@
 <script setup>
 import { getCategoryAPI } from "@/apis/category";
+import { getBannerAPI } from "@/apis/home";
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 const route = useRoute();
@@ -7,6 +8,12 @@ const categoryList = ref({});
 onMounted(async () => {
   const res = await getCategoryAPI(route.params.id);
   categoryList.value = res.result;
+});
+// 获取banner
+const bannerList = ref([]);
+onMounted(async () => {
+  const res = await getBannerAPI({ distributionSite: "2" });
+  bannerList.value = res.result;
 });
 </script>
 
@@ -30,6 +37,13 @@ onMounted(async () => {
       <div class="body">
         <!-- 商品列表-->
       </div>
+    </div>
+    <div class="home-banner">
+      <el-carousel height="500px">
+        <el-carousel-item v-for="item in bannerList" :key="item.id">
+          <img :src="item.imgUrl" alt="banner" />
+        </el-carousel-item>
+      </el-carousel>
     </div>
   </div>
 </template>
@@ -85,6 +99,17 @@ onMounted(async () => {
     margin-top: 20px;
     display: flex;
     justify-content: center;
+  }
+}
+.home-banner {
+  width: 1240px;
+  height: 500px;
+  margin: 0 auto;
+  z-index: 98; // below the category index
+
+  img {
+    width: 100%;
+    height: 500px;
   }
 }
 </style>
