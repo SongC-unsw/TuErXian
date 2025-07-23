@@ -5,8 +5,8 @@ import { useCategory } from "./composables/useCategory";
 //获取分类列表
 const { categoryList } = useCategory();
 // 获取banner
-const { bannerList } = useBanner();
 // optimized: when params change, only change a particular part of the page
+const { bannerList } = useBanner();
 </script>
 
 <template>
