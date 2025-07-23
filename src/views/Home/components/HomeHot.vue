@@ -1,6 +1,6 @@
 <script setup>
 import HomePanel from "./HomePanel.vue";
-import { getHotProdAPI } from "@/apis/hotprod";
+import { getHotProdAPI } from "@/apis/home";
 import { onMounted, ref } from "vue";
 const hotList = ref([]);
 const getHotList = async () => {

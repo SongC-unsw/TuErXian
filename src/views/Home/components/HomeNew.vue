@@ -1,6 +1,6 @@
 <script setup>
 import HomePanel from "./HomePanel.vue";
-import { getNewGoodsAPI } from "@/apis/newgoods";
+import { getNewGoodsAPI } from "@/apis/home";
 import { onMounted, ref } from "vue";
 const newList = ref([]);
 onMounted(async () => {
