@@ -109,7 +109,7 @@ onMounted(() => getGoodsData());
                     </li>
                   </ul>
                   <!-- 图片 -->
-                  <img v-for="img in goods.details.pictures" :src="img" :key="img" alt="" />
+                  <img v-for="img in goods.details.pictures" v-img-lazy="img" :key="img" alt="" />
                 </div>
               </div>
             </div>
