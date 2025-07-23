@@ -9,3 +9,6 @@ export function getNewGoodsAPI() {
 export function getBannerAPI() {
   return httpInstance.get("/home/banner");
 }
+export function getProductAPI() {
+  return httpInstance.get("/home/goods");
+}
