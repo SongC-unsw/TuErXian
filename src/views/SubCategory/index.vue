@@ -23,8 +23,17 @@ const reqData = ref({
 const getGoodsList = async () => {
   const res = await getSubCategoryAPI(reqData.value);
   goodsList.value = res.result.items;
+  if (reqData.value.sortField === "orderNum" || reqData.value.sortField === "evaluateNum") {
+    goodsList.value.sort(() => Math.random() - 0.5); //生成0-1的随机数并减去0.5，像是抛硬币，随机打乱数组
+  }
 };
 onMounted(() => getGoodsList());
+
+const handleTabChange = () => {
+  console.log("Tab changed", reqData.value.sortField);
+  reqData.value.page = 1; // 重置页码
+  getGoodsList();
+};
 </script>
 
 <template>
@@ -41,7 +50,7 @@ onMounted(() => getGoodsList());
     </div>
     <div class="sub-container">
       <!-- 筛选框 -->
-      <el-tabs>
+      <el-tabs v-model="reqData.sortField" @tab-change="handleTabChange">
         <el-tab-pane label="最新商品" name="publishTime"></el-tab-pane>
         <el-tab-pane label="最高人气" name="orderNum"></el-tab-pane>
         <el-tab-pane label="评论最多" name="evaluateNum"></el-tab-pane>
