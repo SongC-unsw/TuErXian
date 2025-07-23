@@ -2,16 +2,24 @@
 import { getCategoryAPI } from "@/apis/category";
 import { getBannerAPI } from "@/apis/home";
 import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, onBeforeRouteUpdate } from "vue-router";
 import GoodsItem from "@/views/Home/components/GoodsItem.vue";
 const route = useRoute();
 const categoryList = ref({});
-onMounted(async () => {
-  const res = await getCategoryAPI(route.params.id);
+const getCategory = async (id = route.params.id) => {
+  const res = await getCategoryAPI(id);
   categoryList.value = res.result;
-});
+};
+onMounted(() => getCategory());
 // 获取banner
 const bannerList = ref([]);
+
+// optimized: when params change, only change a particular part of the page
+onBeforeRouteUpdate((to, from) => {
+  console.log("Changed");
+  //变化之后的路由参数
+  getCategory(to.params.id);
+});
 onMounted(async () => {
   const res = await getBannerAPI({ distributionSite: "2" });
   bannerList.value = res.result;
