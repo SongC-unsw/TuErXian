@@ -24,7 +24,7 @@ const getGoodsList = async () => {
   const res = await getSubCategoryAPI(reqData.value);
   goodsList.value = res.result.items;
   if (reqData.value.sortField === "orderNum" || reqData.value.sortField === "evaluateNum") {
-    goodsList.value.sort(() => Math.random() - 0.5); //生成0-1的随机数并减去0.5，像是抛硬币，随机打乱数组
+    randomSort(goodsList.value);
   }
 };
 onMounted(() => getGoodsList());
@@ -33,6 +33,24 @@ const handleTabChange = () => {
   console.log("Tab changed", reqData.value.sortField);
   reqData.value.page = 1; // 重置页码
   getGoodsList();
+};
+// randomSort
+const randomSort = (arr) => {
+  return arr.sort(() => Math.random() - 0.5);
+};
+const disableInfScroll = ref(false);
+// 无限滚动加载
+
+const load = async () => {
+  reqData.value.page++;
+  const newData = await getSubCategoryAPI(reqData.value);
+  if (reqData.value.sortField === "orderNum" || reqData.value.sortField === "evaluateNum") {
+    randomSort(newData.result.items);
+  }
+  goodsList.value = [...goodsList.value, ...newData.result.items];
+  if (newData.result.items.length === 0) {
+    disableInfScroll.value = true;
+  }
 };
 </script>
 
@@ -55,7 +73,7 @@ const handleTabChange = () => {
         <el-tab-pane label="最高人气" name="orderNum"></el-tab-pane>
         <el-tab-pane label="评论最多" name="evaluateNum"></el-tab-pane>
       </el-tabs>
-      <div class="body">
+      <div class="body" v-infinite-scroll="load" :infinite-scroll-disabled="disableInfScroll">
         <!-- 商品列表-->
         <GoodsItem v-for="item in goodsList" :key="item.id" :goods="item" />
       </div>
