@@ -1,12 +1,17 @@
-<script setup></script>
+<script setup>
+import { useUserStore } from "@/stores/user";
+const userStore = useUserStore();
+const userInfo = userStore.userInfo;
+</script>
 
 <template>
   <nav class="app-topnav">
     <div class="container">
       <ul>
-        <template v-if="false">
+        <!-- 登录时选择显示 -->
+        <template v-if="userInfo.token">
           <li>
-            <a href="javascript:;"><i class="iconfont icon-user"></i>周杰伦</a>
+            <a href="javascript:;"><i class="iconfont icon-user"></i>{{ userInfo.account }}</a>
           </li>
           <li>
             <el-popconfirm title="确认退出吗?" confirm-button-text="确认" cancel-button-text="取消">
