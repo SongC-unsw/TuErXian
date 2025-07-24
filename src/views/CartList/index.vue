@@ -1,11 +1,29 @@
 <script setup>
 import { useCartStore } from "@/stores/cartStore";
 import { storeToRefs } from "pinia";
+import { computed } from "vue";
 const cartStore = useCartStore();
 const { cartList } = storeToRefs(cartStore);
 const updateSelected = (item, selected) => {
   cartStore.updateSelected(item.skuId, selected);
 };
+
+// 计算
+const totalCount = computed(() => {
+  return cartList.value.reduce((acc, item) => {
+    return acc + item.count;
+  }, 0);
+});
+
+const selectedCount = computed(() =>
+  cartList.value.filter((item) => item.selected).reduce((acc, item) => acc + item.count, 0),
+);
+const selectedMoney = computed(() =>
+  cartList.value
+    .filter((item) => item.selected)
+    .reduce((acc, item) => acc + item.count * item.price, 0)
+    .toFixed(2),
+);
 </script>
 
 <template>
@@ -86,8 +104,8 @@ const updateSelected = (item, selected) => {
       <!-- 操作栏 -->
       <div class="action">
         <div class="batch">
-          共 10 件商品，已选择 2 件，商品合计：
-          <span class="red">¥ 200.00 </span>
+          共 {{ totalCount }} 件商品，已选择 {{ selectedCount }} 件，商品合计：
+          <span class="red">¥ {{ selectedMoney }} </span>
         </div>
         <div class="total">
           <el-button size="large" type="primary">下单结算</el-button>
