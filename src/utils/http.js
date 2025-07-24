@@ -1,5 +1,6 @@
 import axios from "axios";
-
+import "element-plus/theme-chalk/el-message.css";
+import { ElMessage } from "element-plus";
 // 创建实例
 const httpInstance = axios.create({
   baseURL: "https://pcapi-xiaotuxian-front-devtest.itheima.net",
@@ -17,12 +18,15 @@ httpInstance.interceptors.request.use(
 );
 
 // 响应拦截器
+// 统一的错误处理和提示
 httpInstance.interceptors.response.use(
-  (response) => {
-    return response.data;
-  },
-  (error) => {
-    return Promise.reject(error);
+  (res) => res.data,
+  (e) => {
+    ElMessage({
+      type: "warning",
+      message: e.response.data.message,
+    });
+    return Promise.reject(e);
   },
 );
 // 导出实例

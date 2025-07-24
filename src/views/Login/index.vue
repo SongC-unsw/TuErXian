@@ -2,6 +2,11 @@
 // 表单校验功能
 // 账户名和密码
 import { ref } from "vue";
+import { loginAPI } from "@/apis/user";
+import "element-plus/theme-chalk/el-message.css";
+import { ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
+const router = useRouter();
 const form = ref({
   account: "",
   password: "",
@@ -27,6 +32,23 @@ const rules = ref({
     },
   ],
 });
+// 获取表单实例统一校验
+const formRef = ref(null);
+
+const handleLogin = () => {
+  formRef.value.validate(async (validate) => {
+    if (validate) {
+      // TODO LOGIN
+      const res = await loginAPI({ account: form.value.account, password: form.value.password });
+
+      // 成功后提示用户，跳转到主页
+      ElMessage.success("登录成功");
+      // 跳转到主页
+      router.replace("/"); // 替换当前路由，不记录历史记录
+      //失败后提示用户
+    }
+  });
+};
 </script>
 
 <template>
@@ -56,6 +78,7 @@ const rules = ref({
               :rules="rules"
               label-position="right"
               label-width="60px"
+              ref="formRef"
               status-icon
             >
               <el-form-item label="账户" prop="account">
@@ -69,7 +92,7 @@ const rules = ref({
                   我已同意隐私条款和服务条款
                 </el-checkbox>
               </el-form-item>
-              <el-button size="large" class="subBtn">登录</el-button>
+              <el-button size="large" class="subBtn" @click="handleLogin">登录</el-button>
             </el-form>
           </div>
         </div>
