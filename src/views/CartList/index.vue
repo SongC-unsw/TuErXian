@@ -57,9 +57,9 @@ const selectedMoney = computed(() =>
               </td>
               <td>
                 <div class="goods">
-                  <RouterLink to="/"><img :src="i.picture" alt="" /></RouterLink>
+                  <RouterLink :to="`/detail/${i.id}`"><img :src="i.picture" alt="" /></RouterLink>
                   <div>
-                    <p class="name ellipsis">
+                    <p class="name ellipsis" @click="$router.push(`/detail/${i.id}`)">
                       {{ i.name }}
                     </p>
                   </div>
@@ -116,6 +116,12 @@ const selectedMoney = computed(() =>
 </template>
 
 <style scoped lang="scss">
+.goods .name {
+  cursor: pointer;
+  &:hover {
+    color: $xtxColor;
+  }
+}
 .xtx-cart-page {
   margin-top: 20px;
 
