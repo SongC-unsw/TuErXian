@@ -12,6 +12,8 @@ import Category from "@/views/Category/index.vue";
 import NotFound from "@/views/NotFound/index.vue";
 import SubCategory from "@/views/SubCategory/index.vue";
 import Detail from "@/views/Detail/index.vue";
+import About from "@/views/About/index.vue";
+import Help from "@/views/Help/index.vue";
 
 NProgress.configure({
   easing: "ease",
@@ -44,6 +46,14 @@ const router = createRouter({
         {
           path: "detail/:id",
           component: Detail,
+        },
+        {
+          path: "about",
+          component: About,
+        },
+        {
+          path: "help",
+          component: Help,
         },
       ],
     },

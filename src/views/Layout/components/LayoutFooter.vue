@@ -48,8 +48,8 @@
         <!-- 版权信息 -->
         <div class="copyright">
           <p>
-            <a href="javascript:;">关于我们</a>
-            <a href="javascript:;">帮助中心</a>
+            <a href="javascript:;" @click="$router.push('/about')">关于我们</a>
+            <a href="javascript:;" @click="$router.push('/help')">帮助中心</a>
             <a href="javascript:;">售后服务</a>
             <a href="javascript:;">配送与验收</a>
             <a href="javascript:;">商务合作</a>
@@ -62,6 +62,8 @@
     </div>
   </footer>
 </template>
+
+<script setup></script>
 
 <style scoped lang="scss">
 .app_footer {
