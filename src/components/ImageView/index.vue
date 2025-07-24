@@ -18,9 +18,14 @@ const enterhandler = (i) => {
 // 获取鼠标在元素中的位置
 const left = ref(0);
 const top = ref(0);
+// 大图坐标
+const positionX = ref(0);
+const positionY = ref(0);
 const target = ref(null);
 const { elementX, elementY, isOutside } = useMouseInElement(target);
-watch([elementX, elementY], () => {
+watch([elementX, elementY, isOutside], () => {
+  // 如果鼠标outside, 不执行函数
+  if (isOutside.value) return;
   // 有效范围内控制
   // 横向
   if (elementX.value > 100 && elementX.value < 300) {
@@ -42,6 +47,9 @@ watch([elementX, elementY], () => {
   if (elementY.value > 300) {
     top.value = 200;
   }
+  // 控制大图
+  positionX.value = -left.value * 2;
+  positionY.value = -top.value * 2;
 });
 </script>
 
@@ -51,7 +59,7 @@ watch([elementX, elementY], () => {
     <div class="middle" ref="target">
       <img :src="imageList[activeIndex]" alt="" />
       <!-- 蒙层小滑块 -->
-      <div class="layer" :style="{ left: `${left}px`, top: `${top}px` }"></div>
+      <div class="layer" :style="{ left: `${left}px`, top: `${top}px` }" v-show="!isOutside"></div>
     </div>
     <!-- 小图列表 -->
     <ul class="small">
@@ -70,12 +78,12 @@ watch([elementX, elementY], () => {
       class="large"
       :style="[
         {
-          backgroundImage: `url(${imageList[0]})`,
-          backgroundPositionX: `0px`,
-          backgroundPositionY: `0px`,
+          backgroundImage: `url(${imageList[activeIndex]})`,
+          backgroundPositionX: `${positionX}px`,
+          backgroundPositionY: `${positionY}px`,
         },
       ]"
-      v-show="false"
+      v-show="!isOutside"
     ></div>
   </div>
 </template>
