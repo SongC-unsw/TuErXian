@@ -2,9 +2,7 @@
 import { getDetailAPI } from "@/apis/detail";
 import { useRoute } from "vue-router";
 import { ref, onMounted } from "vue";
-import ImageView from "@/components/ImageView/index.vue";
 import DetailHot from "./components/DetailHot.vue";
-import XtxSku from "@/components/XtxSku/index.vue";
 
 const route = useRoute();
 const goods = ref({});
@@ -21,6 +19,7 @@ const skuChange = (sku) => {
 <template>
   <div class="xtx-goods-page">
     <div class="container" v-if="goods.details">
+      <!-- // 只在商品详情加载后加载页面 -->
       <div class="bread-container">
         <el-breadcrumb separator=">">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
