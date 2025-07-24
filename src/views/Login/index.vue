@@ -9,6 +9,9 @@ import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user";
 const userStore = useUserStore();
 const router = useRouter();
+if (userStore.userInfo?.token) {
+  router.replace("/");
+}
 const form = ref({
   account: "",
   password: "",
@@ -44,7 +47,6 @@ const handleLogin = () => {
         account: form.value.account,
         password: form.value.password,
       });
-      console.log(res);
 
       // 成功后提示用户，跳转到主页
       ElMessage.success("登录成功");

@@ -13,7 +13,7 @@ const httpInstance = axios.create({
 httpInstance.interceptors.request.use(
   (config) => {
     const userStore = useUserStore();
-    const token = userStore.userInfo.token;
+    const token = userStore.userInfo?.token;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -29,7 +29,7 @@ httpInstance.interceptors.response.use(
   (e) => {
     ElMessage({
       type: "warning",
-      message: e.response.data.message,
+      message: e.response?.data?.message || "错误",
     });
     return Promise.reject(e);
   },

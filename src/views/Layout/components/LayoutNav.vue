@@ -1,7 +1,16 @@
 <script setup>
 import { useUserStore } from "@/stores/user";
+import { useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
+const router = useRouter();
 const userStore = useUserStore();
-const userInfo = userStore.userInfo;
+const { userInfo } = storeToRefs(userStore);
+// 退出登录
+const handleLogout = () => {
+  // console.log("退出登录");
+  userStore.clearUserInfo();
+  router.replace("/");
+};
 </script>
 
 <template>
@@ -9,12 +18,17 @@ const userInfo = userStore.userInfo;
     <div class="container">
       <ul>
         <!-- 登录时选择显示 -->
-        <template v-if="userInfo.token">
+        <template v-if="userInfo?.token">
           <li>
             <a href="javascript:;"><i class="iconfont icon-user"></i>{{ userInfo.account }}</a>
           </li>
           <li>
-            <el-popconfirm title="确认退出吗?" confirm-button-text="确认" cancel-button-text="取消">
+            <el-popconfirm
+              @confirm="handleLogout"
+              title="确认退出吗?"
+              confirm-button-text="确认"
+              cancel-button-text="取消"
+            >
               <template #reference>
                 <a href="javascript:;">退出登录</a>
               </template>
