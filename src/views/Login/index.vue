@@ -6,6 +6,8 @@ import { loginAPI } from "@/apis/user";
 import "element-plus/theme-chalk/el-message.css";
 import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/user";
+const userStore = useUserStore();
 const router = useRouter();
 const form = ref({
   account: "",
@@ -38,8 +40,11 @@ const formRef = ref(null);
 const handleLogin = () => {
   formRef.value.validate(async (validate) => {
     if (validate) {
-      // TODO LOGIN
-      const res = await loginAPI({ account: form.value.account, password: form.value.password });
+      const res = await userStore.getUserInfo({
+        account: form.value.account,
+        password: form.value.password,
+      });
+      console.log(res);
 
       // 成功后提示用户，跳转到主页
       ElMessage.success("登录成功");
