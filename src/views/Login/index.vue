@@ -1,4 +1,21 @@
-<script setup></script>
+<script setup>
+// 表单校验功能
+// 账户名和密码
+import { ref } from "vue";
+const form = ref({
+  account: "",
+  password: "",
+});
+
+const rules = ref({
+  account: [{ required: true, message: "请输入账户名", trigger: "blur" }],
+  password: [
+    { required: true, message: "密码不能为空", trigger: "blur" },
+    { min: 6, message: "密码不能少于6个字符", trigger: "blur" },
+    { max: 14, message: "密码不能超过14个字符", trigger: "blur" },
+  ],
+});
+</script>
 
 <template>
   <div class="login-page">
@@ -21,17 +38,24 @@
         </nav>
         <div class="account-box">
           <div class="form">
-            <el-form label-position="right" label-width="60px" status-icon>
-              <el-form-item label="账户">
-                <el-input />
+            <!-- 登录表单 -->
+            <el-form
+              :model="form"
+              :rules="rules"
+              label-position="right"
+              label-width="60px"
+              status-icon
+            >
+              <el-form-item label="账户" prop="account">
+                <el-input v-model="form.account" />
               </el-form-item>
-              <el-form-item label="密码">
-                <el-input />
+              <el-form-item label="密码" prop="password">
+                <el-input v-model="form.password" type="password" />
               </el-form-item>
               <el-form-item label-width="22px">
                 <el-checkbox size="large"> 我已同意隐私条款和服务条款 </el-checkbox>
               </el-form-item>
-              <el-button size="large" class="subBtn">点击登录</el-button>
+              <el-button size="large" class="subBtn">登录</el-button>
             </el-form>
           </div>
         </div>
@@ -49,7 +73,7 @@
           <a href="javascript:;">搜索推荐</a>
           <a href="javascript:;">友情链接</a>
         </p>
-        <p>CopyRight &copy; 小兔鲜儿</p>
+        <p>Copyright &copy; {{ new Date().getFullYear() }} 小兔鲜儿</p>
       </div>
     </footer>
   </div>
