@@ -14,7 +14,7 @@ import SubCategory from "@/views/SubCategory/index.vue";
 import Detail from "@/views/Detail/index.vue";
 import About from "@/views/About/index.vue";
 import Help from "@/views/Help/index.vue";
-
+import CartList from "@/views/CartList/index.vue";
 NProgress.configure({
   easing: "ease",
   speed: 500,
@@ -54,6 +54,10 @@ const router = createRouter({
         {
           path: "help",
           component: Help,
+        },
+        {
+          path: "cartlist",
+          component: CartList,
         },
       ],
     },

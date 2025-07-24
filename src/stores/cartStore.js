@@ -18,7 +18,13 @@ export const useCartStore = defineStore(
       const index = cartList.value.findIndex((item) => item.skuId === skuId);
       cartList.value.splice(index, 1);
     };
-    return { cartList, addCart, delCart };
+    const updateSelected = (skuId, selected) => {
+      const item = cartList.value.find((item) => item.skuId === skuId);
+      if (item) {
+        item.selected = selected;
+      }
+    };
+    return { cartList, addCart, delCart, updateSelected };
   },
   {
     persist: true,
