@@ -2,7 +2,12 @@
 import { getDetailAPI } from "@/apis/detail";
 import { useRoute } from "vue-router";
 import { ref, onMounted } from "vue";
+import { ElMessage } from "element-plus";
+import "element-plus/theme-chalk/el-message.css";
 import DetailHot from "./components/DetailHot.vue";
+import { useCartStore } from "@/stores/cartStore";
+
+const cartStore = useCartStore();
 
 const route = useRoute();
 const goods = ref({});
@@ -11,8 +16,34 @@ const getGoodsData = async () => {
   goods.value = res.result;
 };
 onMounted(() => getGoodsData());
+let skuObj = {};
 const skuChange = (sku) => {
-  console.log("SKU changed", sku);
+  // 只有当选择完全是才不为空
+  skuObj = sku;
+};
+
+//count
+const count = ref(1);
+const countChange = (value) => {
+  console.log("count changed", value);
+};
+
+//添加购物车
+const addCart = () => {
+  if (skuObj.skuId) {
+    cartStore.addCart({
+      id: goods.value.id,
+      name: goods.value.name,
+      picture: goods.value.mainPictures[0],
+      price: goods.value.price,
+      count: count.value,
+      skuId: skuObj.skuId,
+      attrsText: skuObj.attrsText,
+      selected: true,
+    });
+  } else {
+    ElMessage.warning("请选择完整的规格");
+  }
 };
 </script>
 
@@ -90,10 +121,10 @@ const skuChange = (sku) => {
               <XtxSku :goods="goods" @change="skuChange" />
 
               <!-- 数据组件 -->
-
+              <el-input-number v-model="count" @change="countChange" />
               <!-- 按钮组件 -->
               <div>
-                <el-button size="large" class="btn"> 加入购物车 </el-button>
+                <el-button size="large" class="btn" @click="addCart"> 加入购物车 </el-button>
               </div>
             </div>
           </div>
