@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 
 export const useCartStore = defineStore(
@@ -24,7 +24,17 @@ export const useCartStore = defineStore(
         item.selected = selected;
       }
     };
-    return { cartList, addCart, delCart, updateSelected };
+
+    const isAllSelected = computed(() => {
+      return cartList.value.every((item) => item.selected);
+    });
+
+    const toggleAllSelected = (selected) => {
+      cartList.value.forEach((item) => {
+        item.selected = selected;
+      });
+    };
+    return { cartList, addCart, delCart, updateSelected, isAllSelected, toggleAllSelected };
   },
   {
     persist: true,

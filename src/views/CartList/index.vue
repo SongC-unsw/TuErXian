@@ -4,7 +4,6 @@ import { storeToRefs } from "pinia";
 const cartStore = useCartStore();
 const { cartList } = storeToRefs(cartStore);
 const updateSelected = (item, selected) => {
-  // item.selected = selected;
   cartStore.updateSelected(item.skuId, selected);
 };
 </script>
@@ -17,7 +16,10 @@ const updateSelected = (item, selected) => {
           <thead>
             <tr>
               <th width="120">
-                <el-checkbox />
+                <el-checkbox
+                  :model-value="cartStore.isAllSelected"
+                  @change="cartStore.toggleAllSelected"
+                />
               </th>
               <th width="400">商品信息</th>
               <th width="220">单价</th>
