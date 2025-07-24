@@ -2,6 +2,7 @@
 import { getDetailAPI } from "@/apis/detail";
 import { useRoute } from "vue-router";
 import { ref, onMounted } from "vue";
+import ImageView from "@/components/ImageView/index.vue";
 import DetailHot from "./components/DetailHot.vue";
 
 const route = useRoute();
@@ -9,8 +10,6 @@ const goods = ref({});
 const getGoodsData = async () => {
   const res = await getDetailAPI(route.params.id);
   goods.value = res.result;
-
-  console.log(res.result);
 };
 onMounted(() => getGoodsData());
 </script>
@@ -36,7 +35,7 @@ onMounted(() => getGoodsData());
           <div class="goods-info">
             <div class="media">
               <!-- 图片预览区 -->
-
+              <ImageView />
               <!-- 统计数量 -->
               <ul class="goods-sales">
                 <li>
@@ -340,6 +339,7 @@ onMounted(() => getGoodsData());
       display: flex;
       margin-bottom: 10px;
       width: 50%;
+      padding: 0 10px;
 
       .dt {
         width: 100px;
@@ -349,6 +349,7 @@ onMounted(() => getGoodsData());
       .dd {
         flex: 1;
         color: #666;
+        padding-right: 10px;
       }
     }
   }
