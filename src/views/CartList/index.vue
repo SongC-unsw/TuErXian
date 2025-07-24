@@ -83,7 +83,7 @@ const selectedMoney = computed(() =>
                     @confirm="delCart(i)"
                   >
                     <template #reference>
-                      <a href="javascript:;">删除</a>
+                      <a href="javascript:;" @click="cartStore.delCart(i.skuId)">删除</a>
                     </template>
                   </el-popconfirm>
                 </p>
