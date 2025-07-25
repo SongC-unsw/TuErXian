@@ -1,7 +1,17 @@
 <script setup>
 import { useUserStore } from "@/stores/user";
-
+import { getLikeListAPI } from "@/apis/user";
+import { onMounted, ref } from "vue";
+import GoodsItem from "@/views/Home/components/GoodsItem.vue";
 const userStore = useUserStore();
+const likeList = ref([]);
+const getLikeList = async () => {
+  const res = await getLikeListAPI({ limit: 4 });
+  likeList.value = res.result;
+};
+onMounted(() => {
+  getLikeList();
+});
 </script>
 
 <template>
@@ -15,7 +25,7 @@ const userStore = useUserStore();
     </div>
     <div class="item">
       <a href="javascript:;">
-        <span class="iconfont icon-hy"></span>
+        <span class="iconfont icon-hy" @click="$router.push('/member/user')"></span>
         <p>会员中心</p>
       </a>
       <a href="javascript:;">
@@ -34,7 +44,7 @@ const userStore = useUserStore();
         <h4 data-v-bcb266e0="">猜你喜欢</h4>
       </div>
       <div class="goods-list">
-        <!-- <GoodsItem v-for="good in likeList" :key="good.id" :good="good" /> -->
+        <GoodsItem v-for="item in likeList" :goods="item" :key="item.id" />
       </div>
     </div>
   </div>

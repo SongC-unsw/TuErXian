@@ -7,7 +7,6 @@ const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
 // 退出登录
 const handleLogout = () => {
-  // console.log("退出登录");
   userStore.clearUserInfo();
   router.replace("/");
 };
