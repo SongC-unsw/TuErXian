@@ -12,31 +12,30 @@ export const useCartStore = defineStore(
     const isLogin = computed(() => userStore.userInfo?.token);
     const addCart = async (goods) => {
       // 判断是否登录
+      // 未登录的本地逻辑
+      // 添加过count++ else push
+      const item = cartList.value.find((item) => goods.skuId === item.skuId);
+      if (item) {
+        item.count += goods.count;
+      } else {
+        cartList.value.push(goods);
+      }
       if (isLogin.value) {
         // 登录的逻辑
         await addCartAPI({ skuId: goods.skuId, count: goods.count });
         const res = await getCartListAPI();
         cartList.value = res.result;
-      } else {
-        // 未登录的本地逻辑
-        // 添加过count++ else push
-        const item = cartList.value.find((item) => goods.skuId === item.skuId);
-        if (item) {
-          item.count += goods.count;
-        } else {
-          cartList.value.push(goods);
-        }
       }
     };
 
     const delCart = async (skuId) => {
       const index = cartList.value.findIndex((item) => item.skuId === skuId);
+      cartList.value.splice(index, 1);
+      // optimization delete first fetch later
       if (isLogin.value) {
         await deleteCartAPI({ ids: [skuId] });
         const res = await getCartListAPI();
         cartList.value = res.result;
-      } else {
-        cartList.value.splice(index, 1);
       }
     };
     const updateSelected = (skuId, selected) => {
