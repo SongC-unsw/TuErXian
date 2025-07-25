@@ -19,3 +19,10 @@ export const getLikeListAPI = ({ limit = 4 }) => {
     },
   });
 };
+export const getOrderListAPI = (params) => {
+  return request({
+    url: "/member/order",
+    params,
+    timeout: 15000,
+  });
+};
