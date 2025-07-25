@@ -6,7 +6,7 @@ import { useCountDown } from "@/composables/useCountDown";
 const { formatTime, start } = useCountDown();
 const route = useRoute();
 const baseURL = "http://pcapi-xiaotuxian-front-devtest.itheima.net/";
-const backURL = "http://localhost:5173/paycallback"; // 支付回调地址
+const backURL = "http://tuer.songyuchen.me/paycallback"; // 支付回调地址
 const redirectUrl = encodeURIComponent(backURL);
 const payUrl = `${baseURL}pay/aliPay?orderId=${route.query.id}&redirect=${redirectUrl}`;
 const payInfo = ref({});
