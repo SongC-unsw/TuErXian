@@ -5,13 +5,17 @@ const bannerList = ref([]);
 onMounted(async () => {
   const res = await getBannerAPI();
   bannerList.value = res.result;
+  if (res.result.length > 0) {
+    const img = new Image();
+    img.src = res.result[0].imgUrl;
+  }
 });
 </script>
 <template>
   <div class="home-banner">
     <el-carousel height="500px">
-      <el-carousel-item v-for="item in bannerList" :key="item.id">
-        <img :src="item.imgUrl" alt="banner" />
+      <el-carousel-item v-for="(item, index) in bannerList" :key="item.id">
+        <img :src="item.imgUrl" alt="banner" :fetch-priority="index === 0 ? 'high' : 'auto'" />
       </el-carousel-item>
     </el-carousel>
   </div>
