@@ -2,13 +2,18 @@
 import { useCartStore } from "@/stores/cartStore";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
+import { Trash2 } from "lucide-vue-next";
 const cartStore = useCartStore();
 const { cartList } = storeToRefs(cartStore);
 const updateSelected = (item, selected) => {
   cartStore.updateSelected(item.skuId, selected);
 };
 
+const clearCart = () => {
+  cartStore.clearCart();
+};
 // 计算
+const hasItem = computed(() => !!cartList.value.length);
 const totalCount = computed(() => {
   return cartList.value.reduce((acc, item) => {
     return acc + item.count;
@@ -107,8 +112,22 @@ const selectedMoney = computed(() =>
           共 {{ totalCount }} 件商品，已选择 {{ selectedCount }} 件，商品合计：
           <span class="red">¥ {{ selectedMoney }} </span>
         </div>
+
         <div class="total">
-          <el-button size="large" type="primary">下单结算</el-button>
+          <el-popconfirm
+            title="你确定要清空？"
+            confirm-button-text="确认"
+            cancel-button-text="取消"
+            @confirm="clearCart"
+          >
+            <template #reference>
+              <el-button :disabled="!hasItem" class="clear-all"
+                ><Trash2 size="16px" /><span>清空</span></el-button
+              >
+            </template>
+          </el-popconfirm>
+
+          <el-button :disabled="!hasItem" size="large" type="primary">下单结算</el-button>
         </div>
       </div>
     </div>
@@ -243,6 +262,12 @@ const selectedMoney = computed(() =>
     font-size: 16px;
     font-weight: normal;
     line-height: 50px;
+  }
+}
+.clear-all {
+  padding: 19px;
+  span {
+    margin-left: 5px;
   }
 }
 </style>

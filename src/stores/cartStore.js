@@ -10,21 +10,34 @@ export const useCartStore = defineStore(
     const userStore = useUserStore();
 
     const isLogin = computed(() => userStore.userInfo?.token);
+    // 清空购物车
+    const clearCart = async () => {
+      // 如果没有登录
+      if (!isLogin.value) {
+        cartList.value = [];
+      } else {
+        // 登录的逻辑
+        await deleteCartAPI({ ids: cartList.value.map((item) => item.skuId) });
+        const res = await getCartListAPI();
+        cartList.value = res.result;
+      }
+    };
     const addCart = async (goods) => {
       // 判断是否登录
-      // 未登录的本地逻辑
-      // 添加过count++ else push
-      const item = cartList.value.find((item) => goods.skuId === item.skuId);
-      if (item) {
-        item.count += goods.count;
-      } else {
-        cartList.value.push(goods);
-      }
       if (isLogin.value) {
         // 登录的逻辑
         await addCartAPI({ skuId: goods.skuId, count: goods.count });
         const res = await getCartListAPI();
         cartList.value = res.result;
+      } else {
+        // 未登录的本地逻辑
+        // 添加过count++ else push
+        const item = cartList.value.find((item) => goods.skuId === item.skuId);
+        if (item) {
+          item.count += goods.count;
+        } else {
+          cartList.value.push(goods);
+        }
       }
     };
 
@@ -38,6 +51,7 @@ export const useCartStore = defineStore(
         cartList.value = res.result;
       }
     };
+
     const updateSelected = (skuId, selected) => {
       const item = cartList.value.find((item) => item.skuId === skuId);
       if (item) {
@@ -54,7 +68,15 @@ export const useCartStore = defineStore(
         item.selected = selected;
       });
     };
-    return { cartList, addCart, delCart, updateSelected, isAllSelected, toggleAllSelected };
+    return {
+      cartList,
+      addCart,
+      delCart,
+      updateSelected,
+      isAllSelected,
+      toggleAllSelected,
+      clearCart,
+    };
   },
   {
     persist: true,
