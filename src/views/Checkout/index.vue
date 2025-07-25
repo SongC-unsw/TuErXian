@@ -1,7 +1,8 @@
 <script setup>
-import { getCheckoutDetailAPI, createOrderAPI } from "@/apis/checkout";
+import { getCheckoutDetailAPI, createOrderAPI, addAddressAPI } from "@/apis/checkout";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import AddAddressForm from "./component/AddAddressForm.vue";
 import { useCartStore } from "@/stores/cartStore";
 const cartStore = useCartStore();
 const router = useRouter();
@@ -33,16 +34,22 @@ const createOrder = async () => {
 };
 
 // 控制弹窗打开
+const addFlag = ref(false);
 const showDialog = ref(false);
 // 切换地址
 const activeAddress = ref({});
 const switchAddress = (item) => {
-  console.log("Clicked");
   activeAddress.value = item;
 };
 const confirmAddress = () => {
   curAddress.value = activeAddress.value;
   showDialog.value = false;
+};
+const handleAddAddress = (data) => {
+  addAddressAPI(data).then((res) => {
+    addFlag.value = false;
+    getCheckoutDetail();
+  });
 };
 const getCheckoutDetail = async () => {
   const res = await getCheckoutDetailAPI();
@@ -179,6 +186,10 @@ onMounted(() => getCheckoutDetail());
     </template>
   </el-dialog>
   <!-- 添加地址 -->
+  <el-dialog v-model="addFlag" title="添加地址" width="60%" center>
+    <!-- TODO FORM -->
+    <AddAddressForm @submit="handleAddAddress" />
+  </el-dialog>
 </template>
 
 <style scoped lang="scss">
