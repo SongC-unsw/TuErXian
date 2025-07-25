@@ -3,6 +3,7 @@ import { useCartStore } from "@/stores/cartStore";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { Trash2 } from "lucide-vue-next";
+import { onMounted } from "vue";
 const cartStore = useCartStore();
 const { cartList } = storeToRefs(cartStore);
 const updateSelected = (item, selected) => {
@@ -29,6 +30,9 @@ const selectedMoney = computed(() =>
     .reduce((acc, item) => acc + item.count * item.price, 0)
     .toFixed(2),
 );
+onMounted(() => {
+  cartStore.updateCart();
+});
 </script>
 
 <template>

@@ -15,9 +15,9 @@ export const useCartStore = defineStore(
       const res = await getCartListAPI();
       cartList.value = res.result;
     };
-    const clearCart = async () => {
+    const clearCart = async (logout = false) => {
       // 如果没有登录
-      if (!isLogin.value) {
+      if (!isLogin.value || logout) {
         cartList.value = [];
       } else {
         // 登录的逻辑
@@ -79,6 +79,7 @@ export const useCartStore = defineStore(
       isAllSelected,
       toggleAllSelected,
       clearCart,
+      updateCart,
     };
   },
   {
