@@ -8,9 +8,13 @@ export const useCartStore = defineStore(
   () => {
     const cartList = ref([]);
     const userStore = useUserStore();
-
     const isLogin = computed(() => userStore.userInfo?.token);
+
     // 清空购物车
+    const updateCart = async () => {
+      const res = await getCartListAPI();
+      cartList.value = res.result;
+    };
     const clearCart = async () => {
       // 如果没有登录
       if (!isLogin.value) {
@@ -18,17 +22,17 @@ export const useCartStore = defineStore(
       } else {
         // 登录的逻辑
         await deleteCartAPI({ ids: cartList.value.map((item) => item.skuId) });
-        const res = await getCartListAPI();
-        cartList.value = res.result;
+        updateCart();
       }
     };
+
+    // 添加购物车
     const addCart = async (goods) => {
       // 判断是否登录
       if (isLogin.value) {
         // 登录的逻辑
         await addCartAPI({ skuId: goods.skuId, count: goods.count });
-        const res = await getCartListAPI();
-        cartList.value = res.result;
+        updateCart();
       } else {
         // 未登录的本地逻辑
         // 添加过count++ else push
@@ -47,8 +51,7 @@ export const useCartStore = defineStore(
       // optimization delete first fetch later
       if (isLogin.value) {
         await deleteCartAPI({ ids: [skuId] });
-        const res = await getCartListAPI();
-        cartList.value = res.result;
+        updateCart();
       }
     };
 
