@@ -46,15 +46,15 @@ const confirmAddress = () => {
   showDialog.value = false;
 };
 const handleAddAddress = (data) => {
+  addFlag.value = false;
   addAddressAPI(data).then((res) => {
-    addFlag.value = false;
     getCheckoutDetail();
   });
 };
 const getCheckoutDetail = async () => {
   const res = await getCheckoutDetailAPI();
   checkInfo.value = res.result;
-  curAddress.value = res.result.userAddresses.find((item) => item.isDefault === 1);
+  curAddress.value = res.result.userAddresses.find((item) => item.isDefault === 0);
 };
 onMounted(() => getCheckoutDetail());
 </script>
