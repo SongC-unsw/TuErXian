@@ -2,6 +2,8 @@
 import { getOrderAPI } from "@/apis/pay";
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
+import { useCountDown } from "@/composables/useCountDown";
+const { formatTime, start } = useCountDown();
 const route = useRoute();
 const baseURL = "http://pcapi-xiaotuxian-front-devtest.itheima.net/";
 const backURL = "http://localhost:5173/paycallback"; // 支付回调地址
@@ -11,6 +13,7 @@ const payInfo = ref({});
 const getOrder = async () => {
   const res = await getOrderAPI(route.query.id);
   payInfo.value = res.result;
+  start(res.result.countdown);
 };
 onMounted(() => getOrder());
 </script>
@@ -24,7 +27,7 @@ onMounted(() => getOrder());
         <div class="tip">
           <p>订单提交成功！请尽快完成支付。</p>
           <p>
-            支付还剩 <span>{{ payInfo.countdown }}</span
+            支付还剩 <span>{{ formatTime }}</span
             >, 超时后将取消订单
           </p>
         </div>
