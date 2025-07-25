@@ -94,6 +94,10 @@ const handleLogin = () => {
               <el-form-item label="密码" prop="password">
                 <el-input v-model="form.password" type="password" />
               </el-form-item>
+              <div class="login-method">
+                <button><i class="iconfont icon-weixin"></i></button>
+                <button><i class="iconfont icon-phone"></i></button>
+              </div>
               <el-form-item label-width="22px" prop="agree">
                 <el-checkbox size="large" v-model="form.agree">
                   我已同意隐私条款和服务条款
@@ -124,6 +128,26 @@ const handleLogin = () => {
 </template>
 
 <style scoped lang="scss">
+.login-method {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  button {
+    border-radius: 50%;
+    border: 1px solid #e4e4e4;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    &:hover {
+      color: $xtxColor;
+    }
+  }
+}
 .login-page {
   height: 100vh;
   display: flex;
