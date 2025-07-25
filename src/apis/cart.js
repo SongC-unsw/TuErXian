@@ -54,3 +54,11 @@ export const modCartAPI = ({ selected, count }) => {
     },
   });
 };
+//merge
+export const mergeCartAPI = ({ cartList = [] }) => {
+  return request({
+    url: "/member/cart/merge",
+    method: "POST",
+    data: cartList,
+  });
+};

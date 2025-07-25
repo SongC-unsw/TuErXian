@@ -14,7 +14,8 @@ export const useUserStore = defineStore(
       const res = await loginAPI({ account, password });
       userInfo.value = res.result;
       // 登录时调用
-      await cartStore.updateCart();
+
+      await cartStore.mergeCart();
     };
 
     const clearUserInfo = () => {

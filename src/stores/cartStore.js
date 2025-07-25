@@ -1,7 +1,14 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import { useUserStore } from "@/stores/user";
-import { addCartAPI, getCartListAPI, selectCartAPI, deleteCartAPI, modCartAPI } from "@/apis/cart";
+import {
+  addCartAPI,
+  getCartListAPI,
+  selectCartAPI,
+  deleteCartAPI,
+  modCartAPI,
+  mergeCartAPI,
+} from "@/apis/cart";
 
 export const useCartStore = defineStore(
   "cart",
@@ -9,6 +16,19 @@ export const useCartStore = defineStore(
     const cartList = ref([]);
     const userStore = useUserStore();
     const isLogin = computed(() => userStore.userInfo?.token);
+    const filteredCartList = computed(() => {
+      return cartList.value.map((item) => ({
+        skuId: item.skuId,
+        selected: item.selected,
+        count: item.count,
+      }));
+    });
+    //合并购物车
+    const mergeCart = async () => {
+      const newList = filteredCartList.value;
+      await mergeCartAPI({ cartList: newList });
+      updateCart();
+    };
 
     // 清空购物车
     const updateCart = async () => {
@@ -80,6 +100,7 @@ export const useCartStore = defineStore(
       toggleAllSelected,
       clearCart,
       updateCart,
+      mergeCart,
     };
   },
   {
