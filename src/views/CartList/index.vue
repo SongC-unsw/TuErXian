@@ -131,7 +131,13 @@ onMounted(() => {
             </template>
           </el-popconfirm>
 
-          <el-button :disabled="!hasItem" size="large" type="primary">下单结算</el-button>
+          <el-button
+            :disabled="!hasItem"
+            size="large"
+            type="primary"
+            @click="$router.push('/checkout')"
+            >下单结算</el-button
+          >
         </div>
       </div>
     </div>
