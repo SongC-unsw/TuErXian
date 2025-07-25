@@ -16,6 +16,7 @@ import About from "@/views/About/index.vue";
 import Help from "@/views/Help/index.vue";
 import CartList from "@/views/CartList/index.vue";
 import Checkout from "@/views/Checkout/index.vue";
+import Pay from "@/views/Pay/index.vue";
 NProgress.configure({
   easing: "ease",
   speed: 500,
@@ -63,6 +64,10 @@ const router = createRouter({
         {
           path: "checkout",
           component: Checkout,
+        },
+        {
+          path: "pay",
+          component: Pay,
         },
       ],
     },
