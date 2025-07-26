@@ -24,7 +24,6 @@ declare module 'vue' {
     ElPagination: typeof import('element-plus/es')['ElPagination']
     ElPopconfirm: typeof import('element-plus/es')['ElPopconfirm']
     ElSelect: typeof import('element-plus/es')['ElSelect']
-    ElSkeletonItem: typeof import('element-plus/es')['ElSkeletonItem']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ImageView: typeof import('./src/components/ImageView/index.vue')['default']
