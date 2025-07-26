@@ -1,6 +1,7 @@
 <script setup>
 import { useBanner } from "./composables/useBanner";
 import GoodsItem from "@/views/Home/components/GoodsItem.vue";
+import SkeletonItem from "@/views/Home/components/SkeletonItem.vue";
 import { useCategory } from "./composables/useCategory";
 import { computed } from "vue";
 //获取分类列表
@@ -85,12 +86,26 @@ const showSubList = computed(() => {
           </li>
         </ul>
       </div>
-      <div class="ref-goods" v-for="item in categoryList.children" :key="item.id">
+      <div
+        class="ref-goods"
+        v-for="item in categoryList.children"
+        :key="item.id"
+        v-if="showSubList"
+        :class="{ 'fade-in': showSubList }"
+      >
         <div class="head">
           <h3>- {{ item.name }}-</h3>
         </div>
         <div class="body">
           <GoodsItem v-for="good in item.goods" :goods="good" :key="good.id" />
+        </div>
+      </div>
+      <div class="ref-goods" v-for="i in 3" :key="i" v-else>
+        <div class="head">
+          <h3>- -</h3>
+        </div>
+        <div class="body">
+          <SkeletonItem v-for="i in 4" :key="i" />
         </div>
       </div>
     </div>
