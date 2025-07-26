@@ -1,8 +1,27 @@
 <script setup>
 import { getOrderListAPI } from "@/apis/user";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 
+// 添加专门的loading状态
+const loading = ref(false);
 const orderList = ref([]);
+
+// 添加当前活跃的tab状态，默认为"全部订单"
+const activeTab = ref("all");
+
+// 改进的判断逻辑
+const showSkeleton = computed(() => {
+  return loading.value;
+});
+
+const showEmpty = computed(() => {
+  return !loading.value && orderList.value.length === 0;
+});
+
+const showContent = computed(() => {
+  return !loading.value && orderList.value.length > 0;
+});
+
 // tab列表
 const tabTypes = [
   { name: "all", label: "全部订单" },
@@ -13,15 +32,47 @@ const tabTypes = [
   { name: "complete", label: "已完成" },
   { name: "cancel", label: "已取消" },
 ];
+
 const params = ref({
   orderState: 0,
   page: 1,
   pageSize: 2,
 });
+
 const getOrderList = async () => {
-  const res = await getOrderListAPI(params.value);
-  orderList.value = res.result.items;
+  try {
+    loading.value = true;
+    const res = await getOrderListAPI(params.value);
+    orderList.value = res.result.items;
+  } catch (error) {
+    console.error("获取订单列表失败:", error);
+    orderList.value = [];
+  } finally {
+    loading.value = false;
+  }
 };
+
+// 切换tab时的处理
+const handleTabChange = (tabName) => {
+  // 更新当前活跃的tab
+  activeTab.value = tabName;
+
+  // 根据tab更新orderState
+  const stateMap = {
+    all: 0,
+    unpay: 1,
+    deliver: 2,
+    receive: 3,
+    comment: 4,
+    complete: 5,
+    cancel: 6,
+  };
+
+  params.value.orderState = stateMap[tabName] || 0;
+  params.value.page = 1; // 重置页码
+  getOrderList();
+};
+
 onMounted(() => {
   getOrderList();
 });
@@ -29,15 +80,85 @@ onMounted(() => {
 
 <template>
   <div class="order-container">
-    <el-tabs>
+    <el-tabs v-model="activeTab" @tab-change="handleTabChange">
       <!-- tab切换 -->
-      <el-tab-pane v-for="item in tabTypes" :key="item.name" :label="item.label" />
+      <el-tab-pane
+        v-for="item in tabTypes"
+        :key="item.name"
+        :label="item.label"
+        :name="item.name"
+      />
 
       <div class="main-container">
-        <div class="holder-container" v-if="orderList.length === 0">
+        <!-- 骨架屏幕 - 只在loading时显示 -->
+        <div v-if="showSkeleton" class="skeleton-container">
+          <div v-for="i in 3" :key="i" class="order-skeleton-item">
+            <el-skeleton animated>
+              <template #template>
+                <!-- 订单头部 -->
+                <div class="skeleton-header">
+                  <el-skeleton-item variant="text" style="width: 150px; height: 16px" />
+                  <el-skeleton-item variant="text" style="width: 200px; height: 16px" />
+                  <el-skeleton-item variant="text" style="width: 120px; height: 16px" />
+                </div>
+                <!-- 订单内容 -->
+                <div class="skeleton-body">
+                  <div class="skeleton-goods">
+                    <div v-for="j in 2" :key="j" class="skeleton-goods-item">
+                      <el-skeleton-item variant="image" style="width: 70px; height: 70px" />
+                      <div class="skeleton-goods-info">
+                        <el-skeleton-item
+                          variant="text"
+                          style="width: 180px; height: 16px; margin-bottom: 8px"
+                        />
+                        <el-skeleton-item variant="text" style="width: 120px; height: 14px" />
+                      </div>
+                      <el-skeleton-item variant="text" style="width: 60px; height: 16px" />
+                      <el-skeleton-item variant="text" style="width: 40px; height: 16px" />
+                    </div>
+                  </div>
+                  <div class="skeleton-state">
+                    <el-skeleton-item
+                      variant="text"
+                      style="width: 60px; height: 16px; margin-bottom: 8px"
+                    />
+                    <el-skeleton-item variant="text" style="width: 50px; height: 14px" />
+                  </div>
+                  <div class="skeleton-amount">
+                    <el-skeleton-item
+                      variant="text"
+                      style="width: 80px; height: 18px; margin-bottom: 5px"
+                    />
+                    <el-skeleton-item
+                      variant="text"
+                      style="width: 100px; height: 14px; margin-bottom: 5px"
+                    />
+                    <el-skeleton-item variant="text" style="width: 60px; height: 14px" />
+                  </div>
+                  <div class="skeleton-action">
+                    <el-skeleton-item
+                      variant="button"
+                      style="width: 80px; height: 32px; margin-bottom: 8px"
+                    />
+                    <el-skeleton-item
+                      variant="text"
+                      style="width: 60px; height: 14px; margin-bottom: 5px"
+                    />
+                    <el-skeleton-item variant="text" style="width: 60px; height: 14px" />
+                  </div>
+                </div>
+              </template>
+            </el-skeleton>
+          </div>
+        </div>
+
+        <!-- 空状态 - 只在没有数据且不loading时显示 -->
+        <div class="holder-container" v-else-if="showEmpty">
           <el-empty description="暂无订单数据" />
         </div>
-        <div v-else>
+
+        <!-- 内容 - 只在有数据且不loading时显示 -->
+        <div v-else-if="showContent">
           <!-- 订单列表 -->
           <div class="order-item" v-for="order in orderList" :key="order.id">
             <div class="head">
@@ -270,6 +391,70 @@ onMounted(() => {
             color: $xtxColor;
           }
         }
+      }
+    }
+  }
+}
+
+.skeleton-container {
+  .order-skeleton-item {
+    margin-bottom: 20px;
+    border: 1px solid #f5f5f5;
+    background: #fff;
+
+    .skeleton-header {
+      height: 50px;
+      background: #f5f5f5;
+      padding: 17px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .skeleton-body {
+      display: flex;
+      align-items: stretch;
+      min-height: 120px;
+
+      .skeleton-goods {
+        flex: 1;
+        padding: 20px;
+
+        .skeleton-goods-item {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+          margin-bottom: 15px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          .skeleton-goods-info {
+            flex: 1;
+          }
+        }
+      }
+
+      .skeleton-state {
+        width: 120px;
+        padding: 20px;
+        text-align: center;
+        border-left: 1px solid #f5f5f5;
+      }
+
+      .skeleton-amount {
+        width: 200px;
+        padding: 20px;
+        text-align: center;
+        border-left: 1px solid #f5f5f5;
+      }
+
+      .skeleton-action {
+        width: 140px;
+        padding: 20px;
+        text-align: center;
+        border-left: 1px solid #f5f5f5;
       }
     }
   }
