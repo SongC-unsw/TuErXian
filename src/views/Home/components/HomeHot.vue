@@ -72,7 +72,7 @@ onMounted(() => {
   }
 }
 .fade-in {
-  animation: fadeIn 0.5s ease-in-out;
+  animation: fadeIn 0.3s ease-in-out;
 }
 @keyframes fadeIn {
   from {
