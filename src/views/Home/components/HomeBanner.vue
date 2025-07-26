@@ -103,18 +103,4 @@ const shouldShowSkeleton = computed(() => {
   width: 100%;
   height: 500px;
 }
-
-// 添加淡入动画效果
-.fade-in {
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
 </style>
