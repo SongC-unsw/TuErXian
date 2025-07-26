@@ -1,7 +1,7 @@
 <script setup>
 import { getDetailAPI } from "@/apis/detail";
 import { useRoute } from "vue-router";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { ElMessage } from "element-plus";
 import "element-plus/theme-chalk/el-message.css";
 import DetailHot from "./components/DetailHot.vue";
@@ -11,6 +11,9 @@ const cartStore = useCartStore();
 
 const route = useRoute();
 const goods = ref({});
+const showSkeleton = computed(() => {
+  return !goods.value;
+});
 const getGoodsData = async () => {
   const res = await getDetailAPI(route.params.id);
   goods.value = res.result;
@@ -49,7 +52,11 @@ const addCart = () => {
 
 <template>
   <div class="xtx-goods-page">
-    <div class="container" v-if="goods.details">
+    <div
+      class="container"
+      v-if="!showSkeleton && goods.details"
+      :class="{ 'fade-in': !showSkeleton }"
+    >
       <!-- // 只在商品详情加载后加载页面 -->
       <div class="bread-container">
         <el-breadcrumb separator=">">
@@ -155,6 +162,210 @@ const addCart = () => {
               <!-- 周 -->
               <DetailHot :hot-type="2" />
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="skeleton-container" v-else>
+      <div class="container">
+        <!-- Breadcrumb skeleton -->
+        <div class="breadcrumb-skeleton">
+          <el-skeleton animated>
+            <template #template>
+              <el-skeleton-item variant="text" style="width: 300px; height: 20px" />
+            </template>
+          </el-skeleton>
+        </div>
+
+        <!-- Product info skeleton -->
+        <div class="product-info-skeleton">
+          <div class="media-skeleton">
+            <!-- Image gallery skeleton -->
+            <el-skeleton animated>
+              <template #template>
+                <el-skeleton-item
+                  variant="image"
+                  style="width: 400px; height: 400px; margin-bottom: 20px"
+                />
+                <div style="display: flex; gap: 10px">
+                  <el-skeleton-item variant="image" style="width: 60px; height: 60px" />
+                  <el-skeleton-item variant="image" style="width: 60px; height: 60px" />
+                  <el-skeleton-item variant="image" style="width: 60px; height: 60px" />
+                  <el-skeleton-item variant="image" style="width: 60px; height: 60px" />
+                </div>
+              </template>
+            </el-skeleton>
+
+            <!-- Sales info skeleton -->
+            <div class="sales-skeleton">
+              <el-skeleton animated>
+                <template #template>
+                  <div style="display: flex; justify-content: space-between; margin-top: 20px">
+                    <div style="text-align: center">
+                      <el-skeleton-item
+                        variant="text"
+                        style="width: 60px; height: 16px; margin-bottom: 5px"
+                      />
+                      <el-skeleton-item
+                        variant="text"
+                        style="width: 40px; height: 20px; margin-bottom: 5px"
+                      />
+                      <el-skeleton-item variant="text" style="width: 70px; height: 14px" />
+                    </div>
+                    <div style="text-align: center">
+                      <el-skeleton-item
+                        variant="text"
+                        style="width: 60px; height: 16px; margin-bottom: 5px"
+                      />
+                      <el-skeleton-item
+                        variant="text"
+                        style="width: 40px; height: 20px; margin-bottom: 5px"
+                      />
+                      <el-skeleton-item variant="text" style="width: 70px; height: 14px" />
+                    </div>
+                    <div style="text-align: center">
+                      <el-skeleton-item
+                        variant="text"
+                        style="width: 60px; height: 16px; margin-bottom: 5px"
+                      />
+                      <el-skeleton-item
+                        variant="text"
+                        style="width: 40px; height: 20px; margin-bottom: 5px"
+                      />
+                      <el-skeleton-item variant="text" style="width: 70px; height: 14px" />
+                    </div>
+                    <div style="text-align: center">
+                      <el-skeleton-item
+                        variant="text"
+                        style="width: 60px; height: 16px; margin-bottom: 5px"
+                      />
+                      <el-skeleton-item
+                        variant="text"
+                        style="width: 40px; height: 20px; margin-bottom: 5px"
+                      />
+                      <el-skeleton-item variant="text" style="width: 70px; height: 14px" />
+                    </div>
+                  </div>
+                </template>
+              </el-skeleton>
+            </div>
+          </div>
+
+          <div class="spec-skeleton">
+            <!-- Product details skeleton -->
+            <el-skeleton animated>
+              <template #template>
+                <!-- Product name -->
+                <el-skeleton-item
+                  variant="text"
+                  style="width: 80%; height: 28px; margin-bottom: 15px"
+                />
+                <!-- Product description -->
+                <el-skeleton-item
+                  variant="text"
+                  style="width: 60%; height: 16px; margin-bottom: 15px"
+                />
+                <!-- Price -->
+                <div style="display: flex; gap: 15px; margin-bottom: 20px">
+                  <el-skeleton-item variant="text" style="width: 100px; height: 26px" />
+                  <el-skeleton-item variant="text" style="width: 80px; height: 20px" />
+                </div>
+                <!-- Service info -->
+                <el-skeleton-item
+                  variant="rect"
+                  style="width: 100%; height: 120px; margin-bottom: 20px"
+                />
+                <!-- SKU options -->
+                <div style="margin-bottom: 20px">
+                  <el-skeleton-item
+                    variant="text"
+                    style="width: 60px; height: 16px; margin-bottom: 10px"
+                  />
+                  <div style="display: flex; gap: 10px; margin-bottom: 15px">
+                    <el-skeleton-item variant="button" style="width: 60px; height: 32px" />
+                    <el-skeleton-item variant="button" style="width: 60px; height: 32px" />
+                    <el-skeleton-item variant="button" style="width: 60px; height: 32px" />
+                  </div>
+                  <el-skeleton-item
+                    variant="text"
+                    style="width: 60px; height: 16px; margin-bottom: 10px"
+                  />
+                  <div style="display: flex; gap: 10px; margin-bottom: 20px">
+                    <el-skeleton-item variant="button" style="width: 50px; height: 32px" />
+                    <el-skeleton-item variant="button" style="width: 50px; height: 32px" />
+                  </div>
+                </div>
+                <!-- Quantity and button -->
+                <div style="display: flex; gap: 15px; align-items: center">
+                  <el-skeleton-item variant="button" style="width: 120px; height: 32px" />
+                  <el-skeleton-item variant="button" style="width: 140px; height: 40px" />
+                </div>
+              </template>
+            </el-skeleton>
+          </div>
+        </div>
+
+        <!-- Footer skeleton -->
+        <div class="footer-skeleton">
+          <div class="article-skeleton">
+            <el-skeleton animated>
+              <template #template>
+                <!-- Tabs -->
+                <el-skeleton-item
+                  variant="text"
+                  style="width: 120px; height: 20px; margin-bottom: 20px"
+                />
+                <!-- Product attributes -->
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 10px;
+                    margin-bottom: 30px;
+                  "
+                >
+                  <el-skeleton-item variant="text" style="width: 100%; height: 16px" />
+                  <el-skeleton-item variant="text" style="width: 100%; height: 16px" />
+                  <el-skeleton-item variant="text" style="width: 100%; height: 16px" />
+                  <el-skeleton-item variant="text" style="width: 100%; height: 16px" />
+                  <el-skeleton-item variant="text" style="width: 100%; height: 16px" />
+                  <el-skeleton-item variant="text" style="width: 100%; height: 16px" />
+                </div>
+                <!-- Product images -->
+                <el-skeleton-item
+                  variant="image"
+                  style="width: 100%; height: 200px; margin-bottom: 20px"
+                />
+                <el-skeleton-item
+                  variant="image"
+                  style="width: 100%; height: 200px; margin-bottom: 20px"
+                />
+                <el-skeleton-item variant="image" style="width: 100%; height: 200px" />
+              </template>
+            </el-skeleton>
+          </div>
+
+          <div class="aside-skeleton">
+            <!-- Hot items skeleton -->
+            <el-skeleton animated>
+              <template #template>
+                <el-skeleton-item
+                  variant="text"
+                  style="width: 120px; height: 20px; margin-bottom: 15px"
+                />
+                <div v-for="i in 5" :key="i" style="display: flex; gap: 10px; margin-bottom: 15px">
+                  <el-skeleton-item variant="image" style="width: 60px; height: 60px" />
+                  <div style="flex: 1">
+                    <el-skeleton-item
+                      variant="text"
+                      style="width: 100%; height: 14px; margin-bottom: 5px"
+                    />
+                    <el-skeleton-item variant="text" style="width: 60px; height: 16px" />
+                  </div>
+                </div>
+              </template>
+            </el-skeleton>
           </div>
         </div>
       </div>
@@ -400,5 +611,61 @@ const addCart = () => {
 
 .bread-container {
   padding: 25px 0;
+}
+.skeleton-container {
+  .container {
+    max-width: 1240px;
+    margin: 0 auto;
+    background: #f5f5f5;
+    min-height: 100vh;
+  }
+
+  .breadcrumb-skeleton {
+    padding: 25px 0;
+    background: #fff;
+    margin-bottom: 20px;
+    padding-left: 20px;
+  }
+
+  .product-info-skeleton {
+    display: flex;
+    background: #fff;
+    min-height: 600px;
+    margin-bottom: 20px;
+
+    .media-skeleton {
+      width: 580px;
+      padding: 30px 50px;
+      border-right: 1px solid #f5f5f5;
+
+      .sales-skeleton {
+        margin-top: 20px;
+      }
+    }
+
+    .spec-skeleton {
+      flex: 1;
+      padding: 30px 30px 30px 30px;
+    }
+  }
+
+  .footer-skeleton {
+    display: flex;
+    gap: 20px;
+
+    .article-skeleton {
+      flex: 1;
+      background: #fff;
+      padding: 40px;
+      min-height: 600px;
+    }
+
+    .aside-skeleton {
+      width: 280px;
+      background: #fff;
+      padding: 20px;
+      min-height: 600px;
+    }
+  }
 }
 </style>
