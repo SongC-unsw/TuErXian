@@ -1,5 +1,5 @@
 import { fileURLToPath, URL } from "node:url";
-
+import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vueDevTools from "vite-plugin-vue-devtools";
@@ -28,6 +28,13 @@ export default defineConfig({
       algorithm: "brotliCompress",
       include: /\.(js|css|html|txt|xml|json)$/,
       threshold: 1024,
+    }),
+    visualizer({
+      filename: "dist/stats.html",
+      open: true,
+      gzipSize: true,
+      brotliSize: true,
+      template: "treemap",
     }),
   ],
   build: {
