@@ -14,7 +14,10 @@ const getCategoryData = async () => {
   categoryData.value = res.result;
 };
 onMounted(() => getCategoryData());
-
+// 面包屑显示与否
+const showBreadcrumb = computed(() => {
+  return categoryData.value.name !== undefined;
+});
 // 获取商品列表数据
 const goodsList = ref([]);
 const reqData = ref({
@@ -83,7 +86,7 @@ const load = async () => {
 <template>
   <div class="container">
     <!-- 面包屑 -->
-    <div class="bread-container">
+    <div class="bread-container" v-if="showBreadcrumb" :class="{ 'fade-in': showBreadcrumb }">
       <el-breadcrumb separator=">">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: `/category/${categoryData.parentId}` }">
@@ -91,6 +94,13 @@ const load = async () => {
         </el-breadcrumb-item>
         <el-breadcrumb-item>{{ categoryData.name }}</el-breadcrumb-item>
       </el-breadcrumb>
+    </div>
+    <div class="bread-container" v-else>
+      <el-skeleton style="width: 15%; height: 14px" animated>
+        <template #template>
+          <el-skeleton-item variant="text" style="width: 100%; height: 100%" />
+        </template>
+      </el-skeleton>
     </div>
 
     <div class="sub-container">
