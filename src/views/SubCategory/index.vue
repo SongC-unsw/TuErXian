@@ -4,7 +4,7 @@ import { useVirtualList } from "@vueuse/core";
 import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import GoodsItem from "../Home/components/GoodsItem.vue";
-import { ElSkeleton } from "element-plus";
+import { BeatLoader } from "vue3-spinner";
 
 // 获取面包屑导航数据
 const route = useRoute();
@@ -113,7 +113,9 @@ const load = async () => {
             <div v-for="{ data: row, index } in list" :key="index" class="virtual-row">
               <GoodsItem v-for="item in row" :key="item.id" :goods="item" />
             </div>
-            <div v-if="isLoading">HI</div>
+            <div class="spinner">
+              <BeatLoader :loading="isLoading" size="10px" color="#27ba9b" />
+            </div>
           </div>
         </div>
       </div>
@@ -122,6 +124,11 @@ const load = async () => {
 </template>
 
 <style lang="scss" scoped>
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .bread-container {
   padding: 25px 0;
   color: #666;
