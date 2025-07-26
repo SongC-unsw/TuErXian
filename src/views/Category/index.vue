@@ -12,17 +12,31 @@ const { bannerList } = useBanner();
 const shouldShowCarousel = computed(() => {
   return bannerList.value.length > 0;
 });
+const showBreadcrumb = computed(() => {
+  return categoryList.value.name !== undefined;
+});
 </script>
 
 <template>
   <div class="top-category">
     <div class="container m-top-20">
       <!-- 面包屑 -->
-      <div class="bread-container">
+      <div class="bread-container" v-if="showBreadcrumb">
         <el-breadcrumb separator=">">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
           <el-breadcrumb-item>{{ categoryList.name }}</el-breadcrumb-item>
         </el-breadcrumb>
+      </div>
+      <div class="bread-container" v-else>
+        <el-skeleton
+          style="width: 100%; height: 28px"
+          animated
+          :class="{ 'fade-in': !showBreadcrumb }"
+        >
+          <template #template>
+            <el-skeleton-item variant="text" style="width: 100%; height: 100%" />
+          </template>
+        </el-skeleton>
       </div>
       <!-- 轮播图 -->
       <div class="home-banner">
