@@ -2,6 +2,8 @@
 import { useCategoryStore } from "@/stores/category";
 import HeaderCart from "./HeaderCart.vue";
 const categoryStore = useCategoryStore();
+import { computed } from "vue";
+const showLayer = computed(() => categoryStore.categoryList.length > 0);
 </script>
 
 <template>
@@ -10,7 +12,7 @@ const categoryStore = useCategoryStore();
       <h1 class="logo">
         <RouterLink to="/">小兔鲜</RouterLink>
       </h1>
-      <ul class="app-header-nav">
+      <ul class="app-header-nav" v-if="showLayer" :class="{ 'fade-in': showLayer }">
         <li class="home">
           <RouterLink exact-active-class="active" to="/">首页</RouterLink>
         </li>
@@ -18,6 +20,15 @@ const categoryStore = useCategoryStore();
           <RouterLink active-class="active" :to="`/category/${item.id}`">{{
             item.name
           }}</RouterLink>
+        </li>
+      </ul>
+      <ul v-else class="app-header-nav">
+        <li v-for="i in 10" class="home">
+          <el-skeleton>
+            <template #template>
+              <el-skeleton-item variant="text" style="opacity: 1" />
+            </template>
+          </el-skeleton>
         </li>
       </ul>
       <div class="search">
@@ -134,5 +145,17 @@ const categoryStore = useCategoryStore();
 .active {
   color: $xtxColor;
   border-bottom: 1px solid $xtxColor;
+}
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 </style>
