@@ -2,11 +2,16 @@
 import { useBanner } from "./composables/useBanner";
 import GoodsItem from "@/views/Home/components/GoodsItem.vue";
 import { useCategory } from "./composables/useCategory";
+import { computed } from "vue";
 //获取分类列表
 const { categoryList } = useCategory();
 // 获取banner
 // optimized: when params change, only change a particular part of the page
+
 const { bannerList } = useBanner();
+const shouldShowCarousel = computed(() => {
+  return bannerList.value.length > 0;
+});
 </script>
 
 <template>
@@ -22,8 +27,20 @@ const { bannerList } = useBanner();
       <!-- 轮播图 -->
       <div class="home-banner">
         <el-carousel height="500px">
-          <el-carousel-item v-for="item in bannerList" :key="item.id">
+          <el-carousel-item
+            v-for="item in bannerList"
+            :key="item.id"
+            v-if="shouldShowCarousel"
+            :class="{ 'fade-in': shouldShowCarousel }"
+          >
             <img :src="item.imgUrl" alt="" />
+          </el-carousel-item>
+          <el-carousel-item v-for="i in 3" :key="i" v-else>
+            <el-skeleton style="width: 100%; height: 500px" animated>
+              <template #template>
+                <el-skeleton-item variant="image" style="width: 100%; height: 500px" />
+              </template>
+            </el-skeleton>
           </el-carousel-item>
         </el-carousel>
       </div>
@@ -137,6 +154,17 @@ const { bannerList } = useBanner();
   img {
     width: 100%;
     height: 500px;
+  }
+}
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 </style>
