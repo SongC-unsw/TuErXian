@@ -1,7 +1,11 @@
 <script setup>
 import HomePanel from "./HomePanel.vue";
 import { getHotProdAPI } from "@/apis/home";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
+import SkeletonItem from "./SkeletonItem.vue";
+const showSkeleton = computed(() => {
+  return hotList.value.length === 0;
+});
 const hotList = ref([]);
 const getHotList = async () => {
   const res = await getHotProdAPI();
@@ -15,12 +19,20 @@ onMounted(() => {
 <template>
   <HomePanel title="人气推荐" sub-title="人气爆款 不容错过">
     <ul class="goods-list">
-      <li v-for="item in hotList" :key="item.id">
+      <li
+        v-for="item in hotList"
+        :key="item.id"
+        v-if="!showSkeleton"
+        :class="{ 'fade-in': !showSkeleton }"
+      >
         <RouterLink to="/">
           <img v-img-lazy="item.picture" alt="" />
           <p class="name">{{ item.title }}</p>
           <p class="desc">{{ item.alt }}</p>
         </RouterLink>
+      </li>
+      <li v-for="i in 4" :key="i" v-else>
+        <SkeletonItem />
       </li>
     </ul>
   </HomePanel>
@@ -57,6 +69,17 @@ onMounted(() => {
       color: #999;
       font-size: 18px;
     }
+  }
+}
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 </style>
