@@ -1,0 +1,127 @@
+# Robots.txt for 小兔鲜儿 E-commerce Site
+
+# 允许所有搜索引擎访问
+User-agent: *
+
+# 允许索引的页面（公开内容）
+Allow: /
+Allow: /category/
+Allow: /detail/
+Allow: /about
+Allow: /help
+
+# 禁止索引的页面（私人/敏感页面）
+Disallow: /login
+Disallow: /cartlist
+Disallow: /checkout
+Disallow: /pay
+Disallow: /paycallback
+Disallow: /member/
+
+# 禁止访问构建产物和配置文件
+Disallow: /assets/
+Disallow: /.well-known/
+Disallow: /api/
+
+# 设置爬取延迟（秒）- 避免对服务器造成过大压力
+Crawl-delay: 1
+
+
+
+# 特定搜索引擎优化
+# Google 搜索引擎
+User-agent: Googlebot
+Disallow: /login
+Disallow: /cartlist
+Disallow: /checkout
+Disallow: /pay
+Disallow: /paycallback
+Disallow: /member/
+Crawl-delay: 1
+
+# 百度搜索引擎
+User-agent: Baiduspider
+Disallow: /login
+Disallow: /cartlist
+Disallow: /checkout
+Disallow: /pay
+Disallow: /paycallback
+Disallow: /member/
+Crawl-delay: 2
+
+# 禁止恶意爬虫
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+# 禁止 AI 训练数据爬虫
+# OpenAI 相关爬虫
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: OpenAI-Crawler
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+# Anthropic (Claude) 爬虫
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+# Google AI/Bard 爬虫
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: Bard
+Disallow: /
+
+# Meta AI 爬虫
+User-agent: FacebookBot
+Disallow: /
+
+User-agent: Meta-ExternalAgent
+Disallow: /
+
+# 其他 AI 训练爬虫
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: YouBot
+Disallow: /
+
+User-agent: Diffbot
+Disallow: /
+
+User-agent: ImagesiftBot
+Disallow: /
+
+User-agent: Omgilibot
+Disallow: /
+
+User-agent: DataForSeoBot
+Disallow: /
+
+# 通用 AI 内容收集爬虫
+User-agent: AI2Bot
+Disallow: /
+
+User-agent: iaskspider
+Disallow: /
+
+User-agent: img2dataset
+Disallow: /
