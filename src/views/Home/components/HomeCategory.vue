@@ -1,11 +1,15 @@
 <script setup>
 import { useCategoryStore } from "@/stores/category";
+import { computed, onMounted } from "vue";
 const categoryStore = useCategoryStore();
+
+const showLayer = computed(() => categoryStore.categoryList.length > 0);
+onMounted(() => {});
 </script>
 
 <template>
   <div class="home-category">
-    <ul class="menu">
+    <ul class="menu" v-if="showLayer" :class="{ 'fade-in': showLayer }">
       <li v-for="item in categoryStore.categoryList" :key="item.id">
         <RouterLink to="/">{{ item.name }}</RouterLink>
         <RouterLink v-for="i in item.children.slice(0, 2)" :key="i.id" to="/">{{
@@ -29,6 +33,17 @@ const categoryStore = useCategoryStore();
         </div>
       </li>
     </ul>
+    <div v-else class="category-skeleton">
+      <el-skeleton style="padding-right: 40px" animated>
+        <template #template>
+          <ul class="menu">
+            <li v-for="i in 9">
+              <el-skeleton-item variant="text" style="opacity: 0.3" />
+            </li>
+          </ul>
+        </template>
+      </el-skeleton>
+    </div>
   </div>
 </template>
 
@@ -148,6 +163,18 @@ const categoryStore = useCategoryStore();
         }
       }
     }
+  }
+}
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 </style>

@@ -74,9 +74,9 @@ const shouldShowSkeleton = computed(() => {
 
     <!-- 骨架屏 - 在图片加载完成前显示 -->
     <div v-if="shouldShowSkeleton" class="banner-skeleton">
-      <el-skeleton style="width: 100%; height: 500px">
+      <el-skeleton style="width: 100%; height: 500px" animated>
         <template #template>
-          <el-skeleton-item variant="image" style="width: 100%; height: 500px" animated />
+          <el-skeleton-item variant="image" style="width: 100%; height: 500px" />
         </template>
       </el-skeleton>
     </div>
