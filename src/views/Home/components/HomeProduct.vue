@@ -1,19 +1,28 @@
 <script setup>
 import HomePanel from "./HomePanel.vue";
 import { getProductAPI } from "@/apis/home";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import GoodsItem from "./GoodsItem.vue";
+import SkeletonItem from "./SkeletonItem.vue";
 const productList = ref([]);
+const showSkeleton = computed(() => {
+  return productList.value.length === 0;
+});
 onMounted(async () => {
   const res = await getProductAPI();
-  console.log(res);
   productList.value = res.result;
 });
 </script>
 
 <template>
   <div class="home-product">
-    <HomePanel :title="cate.name" v-for="cate in productList" :key="cate.id">
+    <HomePanel
+      :title="cate.name"
+      v-for="cate in productList"
+      :key="cate.id"
+      v-if="!showSkeleton"
+      :class="{ 'fade-in': !showSkeleton }"
+    >
       <div class="box">
         <RouterLink class="cover" to="/">
           <img v-img-lazy="cate.picture" />
@@ -25,6 +34,22 @@ onMounted(async () => {
         <ul class="goods-list">
           <li v-for="good in cate.goods" :key="good.id">
             <GoodsItem :goods="good" />
+          </li>
+        </ul>
+      </div>
+    </HomePanel>
+    <HomePanel title="" v-else v-for="i in 4" :key="i">
+      <div class="box">
+        <RouterLink class="cover" to="/">
+          <el-skeleton-item variant="image" style="width: 240px; height: 610px" />
+          <strong class="label">
+            <el-skeleton-item variant="text" style="width: 188px; height: 66px" />
+            <el-skeleton-item variant="text" style="width: 188px; height: 66px" />
+          </strong>
+        </RouterLink>
+        <ul class="goods-list">
+          <li v-for="i in 8" :key="i">
+            <SkeletonItem />
           </li>
         </ul>
       </div>
@@ -118,6 +143,17 @@ onMounted(async () => {
         }
       }
     }
+  }
+}
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 </style>
