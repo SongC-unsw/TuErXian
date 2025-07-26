@@ -15,6 +15,9 @@ const shouldShowCarousel = computed(() => {
 const showBreadcrumb = computed(() => {
   return categoryList.value.name !== undefined;
 });
+const showSubList = computed(() => {
+  return categoryList.value.children;
+});
 </script>
 
 <template>
@@ -61,12 +64,24 @@ const showBreadcrumb = computed(() => {
       <div class="sub-list">
         <h3>全部分类</h3>
         <ul>
-          <li v-for="i in categoryList.children" :key="i.id">
+          <li
+            v-for="i in categoryList.children"
+            :key="i.id"
+            v-if="showSubList"
+            :class="{ 'fade-in': showSubList }"
+          >
             <!-- 配置路由关系 -->
             <RouterLink :to="`/category/sub/${i.id}`">
               <img :src="i.picture" />
               <p>{{ i.name }}</p>
             </RouterLink>
+          </li>
+          <li v-for="i in 7" :key="i" v-else>
+            <el-skeleton style="width: 168px; height: 160px" animated>
+              <template #template>
+                <el-skeleton-item variant="image" style="width: 100px; height: 100px" />
+              </template>
+            </el-skeleton>
           </li>
         </ul>
       </div>
