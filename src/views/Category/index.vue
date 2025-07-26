@@ -33,7 +33,7 @@ const showSubList = computed(() => {
       </div>
       <div class="bread-container" v-else>
         <el-skeleton
-          style="width: 100%; height: 28px"
+          style="width: 15%; height: 14px"
           animated
           :class="{ 'fade-in': !showBreadcrumb }"
         >
