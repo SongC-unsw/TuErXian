@@ -1,8 +1,11 @@
 <script setup>
 import HomePanel from "./HomePanel.vue";
 import { getNewGoodsAPI } from "@/apis/home";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 const newList = ref([]);
+const showSkeleton = computed(() => {
+  return newList.value.length === 0;
+});
 onMounted(async () => {
   const res = await getNewGoodsAPI();
   newList.value = res.result;
@@ -12,12 +15,20 @@ onMounted(async () => {
 <template>
   <HomePanel title="新鲜好物" subTitle="新鲜出炉 品质靠谱">
     <ul class="goods-list">
-      <li v-for="item in newList" :key="item.id">
+      <li
+        v-for="item in newList"
+        :key="item.id"
+        v-if="!showSkeleton"
+        :class="{ 'fade-in': !showSkeleton }"
+      >
         <RouterLink :to="`/detail/${item.id}`">
           <img :src="item.picture" alt="" />
           <p class="name">{{ item.name }}</p>
           <p class="price">&yen;{{ item.price }}</p>
         </RouterLink>
+      </li>
+      <li v-for="i in 4" :key="i" v-else>
+        <SkeletonItem />
       </li>
     </ul>
   </HomePanel>
@@ -61,6 +72,17 @@ onMounted(async () => {
     .name {
       padding: 12px;
     }
+  }
+}
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 </style>
