@@ -14,7 +14,7 @@ import Home from "@/views/Home/index.vue";
 // import Detail from "@/views/Detail/index.vue";
 // import About from "@/views/About/index.vue";
 // import Help from "@/views/Help/index.vue";
-import CartList from "@/views/CartList/index.vue";
+// import CartList from "@/views/CartList/index.vue";
 // import Checkout from "@/views/Checkout/index.vue";
 // import Pay from "@/views/Pay/index.vue";
 // import PayCallback from "@/views/Pay/payback.vue";
@@ -65,7 +65,7 @@ const router = createRouter({
         },
         {
           path: "cartlist",
-          component: CartList,
+          component: () => import("@/views/CartList/index.vue"),
           meta: { requiresAuth: true },
         },
         {

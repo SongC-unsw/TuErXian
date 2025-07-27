@@ -2,7 +2,7 @@
 // 表单校验功能
 // 账户名和密码
 import { ref } from "vue";
-import { loginAPI } from "@/apis/user";
+// import { loginAPI } from "@/apis/user";
 import "element-plus/theme-chalk/el-message.css";
 import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
@@ -199,7 +199,8 @@ const handleLogin = () => {
 }
 
 .login-section {
-  background: url("@/assets/images/login-bg.png") no-repeat center / cover;
+  background: url("https://img.picgo.net/2025/07/27/login-bg5ac79144cf0dc369.png") no-repeat
+    center / cover;
   height: 488px;
   position: relative;
 
