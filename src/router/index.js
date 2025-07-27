@@ -21,6 +21,8 @@ import PayCallback from "@/views/Pay/payback.vue";
 import Member from "@/views/Member/index.vue";
 import UserInfo from "@/views/Member/components/UserInfo.vue";
 import UserOrder from "@/views/Member/components/UserOrder.vue";
+import { useUserStore } from "@/stores/user";
+import { ElMessage } from "element-plus";
 NProgress.configure({
   easing: "ease",
   speed: 500,
@@ -64,14 +66,17 @@ const router = createRouter({
         {
           path: "cartlist",
           component: CartList,
+          meta: { requiresAuth: true },
         },
         {
           path: "checkout",
           component: Checkout,
+          meta: { requiresAuth: true },
         },
         {
           path: "pay",
           component: Pay,
+          meta: { requiresAuth: true },
         },
         {
           path: "paycallback",
@@ -80,14 +85,17 @@ const router = createRouter({
         {
           path: "member",
           component: Member,
+          meta: { requiresAuth: true },
           children: [
             {
               path: "user",
               component: UserInfo,
+              meta: { requiresAuth: true },
             },
             {
               path: "order",
               component: UserOrder,
+              meta: { requiresAuth: true },
             },
           ],
         },
@@ -113,6 +121,26 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   NProgress.start();
+
+  const userStore = useUserStore();
+  const isLoggedIn = !!userStore.userInfo?.token;
+
+  // 检查当前路由及其父路由是否需要登录
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+
+  if (requiresAuth && !isLoggedIn) {
+    ElMessage.warning("请先登录");
+    next({
+      path: "/login",
+      query: { redirect: to.fullPath },
+    });
+    return;
+  }
+  if (to.path === "/login" && isLoggedIn) {
+    next("/");
+    return;
+  }
+
   next();
 });
 router.afterEach(() => {

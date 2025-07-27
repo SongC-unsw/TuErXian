@@ -1,16 +1,4 @@
-<script setup>
-import { useRouter } from "vue-router";
-import { useUserStore } from "@/stores/user";
-import { computed, onMounted } from "vue";
-const router = useRouter();
-const userStore = useUserStore();
-const isLogin = computed(() => userStore.userInfo?.token);
-onMounted(() => {
-  if (!isLogin.value) {
-    router.push("/login");
-  }
-});
-</script>
+<script setup></script>
 
 <template>
   <div class="container">

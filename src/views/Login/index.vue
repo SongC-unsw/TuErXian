@@ -9,9 +9,7 @@ import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user";
 const userStore = useUserStore();
 const router = useRouter();
-if (userStore.userInfo?.token) {
-  router.replace("/");
-}
+
 const form = ref({
   account: "",
   password: "",
