@@ -1,14 +1,8 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import { useUserStore } from "@/stores/user";
-import {
-  addCartAPI,
-  getCartListAPI,
-  selectCartAPI,
-  deleteCartAPI,
-  modCartAPI,
-  mergeCartAPI,
-} from "@/apis/cart";
+import { throttle } from "@/utils/throttle";
+import { addCartAPI, getCartListAPI, deleteCartAPI, mergeCartAPI } from "@/apis/cart";
 
 export const useCartStore = defineStore(
   "cart",
@@ -47,7 +41,7 @@ export const useCartStore = defineStore(
     };
 
     // 添加购物车
-    const addCart = async (goods) => {
+    const addCartOld = async (goods) => {
       // 判断是否登录
       if (isLogin.value) {
         // 登录的逻辑
@@ -64,8 +58,9 @@ export const useCartStore = defineStore(
         }
       }
     };
+    const addCart = throttle(addCartOld, 500);
 
-    const delCart = async (skuId) => {
+    const delCartOld = async (skuId) => {
       const index = cartList.value.findIndex((item) => item.skuId === skuId);
       cartList.value.splice(index, 1);
       // optimization delete first fetch later
@@ -74,6 +69,7 @@ export const useCartStore = defineStore(
         updateCart();
       }
     };
+    const delCart = throttle(delCartOld, 300);
 
     const updateSelected = (skuId, selected) => {
       const item = cartList.value.find((item) => item.skuId === skuId);
