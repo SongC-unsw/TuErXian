@@ -5,22 +5,22 @@ import { createRouter, createWebHistory } from "vue-router";
 // Nprogress 进度条
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
-import Login from "@/views/Login/index.vue";
+// import Login from "@/views/Login/index.vue";
 import Layout from "@/views/Layout/index.vue";
 import Home from "@/views/Home/index.vue";
-import Category from "@/views/Category/index.vue";
-import NotFound from "@/views/NotFound/index.vue";
-import SubCategory from "@/views/SubCategory/index.vue";
-import Detail from "@/views/Detail/index.vue";
-import About from "@/views/About/index.vue";
-import Help from "@/views/Help/index.vue";
+// import Category from "@/views/Category/index.vue";
+// import NotFound from "@/views/NotFound/index.vue";
+// import SubCategory from "@/views/SubCategory/index.vue";
+// import Detail from "@/views/Detail/index.vue";
+// import About from "@/views/About/index.vue";
+// import Help from "@/views/Help/index.vue";
 import CartList from "@/views/CartList/index.vue";
-import Checkout from "@/views/Checkout/index.vue";
-import Pay from "@/views/Pay/index.vue";
-import PayCallback from "@/views/Pay/payback.vue";
-import Member from "@/views/Member/index.vue";
-import UserInfo from "@/views/Member/components/UserInfo.vue";
-import UserOrder from "@/views/Member/components/UserOrder.vue";
+// import Checkout from "@/views/Checkout/index.vue";
+// import Pay from "@/views/Pay/index.vue";
+// import PayCallback from "@/views/Pay/payback.vue";
+// import Member from "@/views/Member/index.vue";
+// import UserInfo from "@/views/Member/components/UserInfo.vue";
+// import UserOrder from "@/views/Member/components/UserOrder.vue";
 import { useUserStore } from "@/stores/user";
 import { ElMessage } from "element-plus";
 NProgress.configure({
@@ -45,23 +45,23 @@ const router = createRouter({
         },
         {
           path: "category/:id",
-          component: Category,
+          component: () => import("@/views/Category/index.vue"),
         },
         {
           path: "category/sub/:id",
-          component: SubCategory,
+          component: () => import("@/views/SubCategory/index.vue"),
         },
         {
           path: "detail/:id",
-          component: Detail,
+          component: () => import("@/views/Detail/index.vue"),
         },
         {
           path: "about",
-          component: About,
+          component: () => import("@/views/About/index.vue"),
         },
         {
           path: "help",
-          component: Help,
+          component: () => import("@/views/Help/index.vue"),
         },
         {
           path: "cartlist",
@@ -70,31 +70,31 @@ const router = createRouter({
         },
         {
           path: "checkout",
-          component: Checkout,
+          component: () => import("@/views/Checkout/index.vue"),
           meta: { requiresAuth: true },
         },
         {
           path: "pay",
-          component: Pay,
+          component: () => import("@/views/Pay/index.vue"),
           meta: { requiresAuth: true },
         },
         {
           path: "paycallback",
-          component: PayCallback,
+          component: () => import("@/views/Pay/payback.vue"),
         },
         {
           path: "member",
-          component: Member,
+          component: () => import("@/views/Member/index.vue"),
           meta: { requiresAuth: true },
           children: [
             {
               path: "user",
-              component: UserInfo,
+              component: () => import("@/views/Member/components/UserInfo.vue"),
               meta: { requiresAuth: true },
             },
             {
               path: "order",
-              component: UserOrder,
+              component: () => import("@/views/Member/components/UserOrder.vue"),
               meta: { requiresAuth: true },
             },
           ],
@@ -103,12 +103,12 @@ const router = createRouter({
     },
     {
       path: "/login",
-      component: Login,
+      component: () => import("@/views/Login/index.vue"),
     },
     {
       path: "/:pathMatch(.*)*",
       name: "NotFound",
-      component: NotFound,
+      component: () => import("@/views/NotFound/index.vue"),
     },
   ],
   scrollBehavior() {
