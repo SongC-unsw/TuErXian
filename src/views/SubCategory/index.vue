@@ -5,6 +5,7 @@ import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import GoodsItem from "../Home/components/GoodsItem.vue";
 import Spinner from "@/components/Spinner/index.vue";
+import { throttle } from "@/utils/throttle";
 
 // 获取面包屑导航数据
 const route = useRoute();
@@ -27,13 +28,14 @@ const reqData = ref({
   sortField: "publishTime", // 排序字段
 });
 const isLoading = ref(false);
-const getGoodsList = async () => {
+const getGoodsListOld = async () => {
   const res = await getSubCategoryAPI(reqData.value);
   goodsList.value = res.result.items;
   if (reqData.value.sortField === "orderNum" || reqData.value.sortField === "evaluateNum") {
     randomSort(goodsList.value);
   }
 };
+const getGoodsList = throttle(getGoodsListOld, 500);
 onMounted(() => getGoodsList());
 
 const handleTabChange = () => {
@@ -67,10 +69,10 @@ const { list, containerProps, wrapperProps } = useVirtualList(rowData, {
 const disableInfScroll = ref(false);
 
 // 无限滚动加载
-const load = async () => {
+const loadOld = async () => {
   reqData.value.page++;
   isLoading.value = true;
-  console.log(isLoading.value);
+
   const newData = await getSubCategoryAPI(reqData.value);
   isLoading.value = false;
   if (reqData.value.sortField === "orderNum" || reqData.value.sortField === "evaluateNum") {
@@ -81,6 +83,7 @@ const load = async () => {
     disableInfScroll.value = true;
   }
 };
+const load = throttle(loadOld, 500);
 </script>
 
 <template>
