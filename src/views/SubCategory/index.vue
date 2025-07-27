@@ -83,7 +83,7 @@ const loadOld = async () => {
     disableInfScroll.value = true;
   }
 };
-const load = throttle(loadOld, 500);
+const load = throttle(loadOld, 1000);
 </script>
 
 <template>
