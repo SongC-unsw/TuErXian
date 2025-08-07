@@ -11,7 +11,13 @@ export const lazyPlugin = {
           el,
           ([{ isIntersecting }]) => {
             if (isIntersecting) {
-              el.src = imgUrl;
+              // Ensure HTTPS for all image URLs
+              const secureUrl = imgUrl?.startsWith('http://') 
+                ? imgUrl.replace('http://', 'https://') 
+                : imgUrl?.startsWith('//') 
+                  ? 'https:' + imgUrl 
+                  : imgUrl;
+              el.src = secureUrl;
               stop();
             }
           },

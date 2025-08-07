@@ -1,11 +1,22 @@
 <script setup>
 import HomePanel from "./HomePanel.vue";
+import SkeletonItem from "./SkeletonItem.vue";
 import { getNewGoodsAPI } from "@/apis/home";
 import { onMounted, ref, computed } from "vue";
 const newList = ref([]);
 const showSkeleton = computed(() => {
   return newList.value.length === 0;
 });
+
+// 确保图片URL使用HTTPS
+const secureImgUrl = (url) => {
+  if (!url) return url;
+  return url.startsWith('http://') 
+    ? url.replace('http://', 'https://') 
+    : url.startsWith('//') 
+      ? 'https:' + url 
+      : url;
+};
 onMounted(async () => {
   const res = await getNewGoodsAPI();
   newList.value = res.result;
@@ -22,7 +33,7 @@ onMounted(async () => {
         :class="{ 'fade-in': !showSkeleton }"
       >
         <RouterLink :to="`/detail/${item.id}`">
-          <img :src="item.picture" alt="" />
+          <img :src="secureImgUrl(item.picture)" alt="" />
           <p class="name">{{ item.name }}</p>
           <p class="price">&yen;{{ item.price }}</p>
         </RouterLink>

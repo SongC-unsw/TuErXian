@@ -5,8 +5,8 @@ import { useRoute } from "vue-router";
 import { useCountDown } from "@/composables/useCountDown";
 const { formatTime, start } = useCountDown();
 const route = useRoute();
-const baseURL = "http://pcapi-xiaotuxian-front-devtest.itheima.net/";
-const backURL = "http://tuer.songyuchen.me/paycallback"; // 支付回调地址
+const baseURL = "https://pcapi-xiaotuxian-front-devtest.itheima.net/";
+const backURL = "https://tuer.songyuchen.me/paycallback"; // 支付回调地址
 const redirectUrl = encodeURIComponent(backURL);
 const payUrl = `${baseURL}pay/aliPay?orderId=${route.query.id}&redirect=${redirectUrl}`;
 const payInfo = ref({});

@@ -78,6 +78,10 @@
         {
           "key": "Referrer-Policy",
           "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' at.alicdn.com; img-src 'self' data: blob: https: http:; font-src 'self' data: at.alicdn.com; connect-src 'self' https://pcapi-xiaotuxian-front-devtest.itheima.net https://yjy-xiaotuxian-dev.oss-cn-beijing.aliyuncs.com https://tuer.songyuchen.me; media-src 'self'; object-src 'none'; frame-src 'none'; worker-src 'self' blob:; child-src 'self'; form-action 'self' https://pcapi-xiaotuxian-front-devtest.itheima.net; base-uri 'self'; upgrade-insecure-requests;"
         }
       ]
     }

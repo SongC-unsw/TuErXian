@@ -29,12 +29,12 @@ onMounted(async () => {
       isFirstImageLoaded.value = true;
     };
 
-    firstImg.src = res.result[0].imgUrl;
+    firstImg.src = secureImgUrl(res.result[0].imgUrl);
 
     // 预加载其他图片（不影响骨架屏显示）
     res.result.slice(1, 3).forEach((item, index) => {
       const img = new Image();
-      img.src = item.imgUrl;
+      img.src = secureImgUrl(item.imgUrl);
     });
   } else {
     // 如果没有图片数据，直接隐藏骨架屏
@@ -51,6 +51,16 @@ const shouldShowCarousel = computed(() => {
 const shouldShowSkeleton = computed(() => {
   return !isDataLoaded.value || !isFirstImageLoaded.value;
 });
+
+// 确保所有图片URL使用HTTPS
+const secureImgUrl = (url) => {
+  if (!url) return url;
+  return url.startsWith('http://') 
+    ? url.replace('http://', 'https://') 
+    : url.startsWith('//') 
+      ? 'https:' + url 
+      : url;
+};
 </script>
 
 <template>
@@ -63,7 +73,7 @@ const shouldShowSkeleton = computed(() => {
     >
       <el-carousel-item v-for="(item, index) in bannerList" :key="item.id">
         <img
-          :src="item.imgUrl"
+          :src="secureImgUrl(item.imgUrl)"
           alt="banner"
           :fetch-priority="index === 0 ? 'high' : 'auto'"
           loading="eager"
