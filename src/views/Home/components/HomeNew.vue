@@ -1,6 +1,5 @@
 <script setup>
 import HomePanel from "./HomePanel.vue";
-import SkeletonItem from "./SkeletonItem.vue";
 import { getNewGoodsAPI } from "@/apis/home";
 import { onMounted, ref, computed } from "vue";
 const newList = ref([]);
@@ -11,10 +10,10 @@ const showSkeleton = computed(() => {
 // 确保图片URL使用HTTPS
 const secureImgUrl = (url) => {
   if (!url) return url;
-  return url.startsWith('http://') 
-    ? url.replace('http://', 'https://') 
-    : url.startsWith('//') 
-      ? 'https:' + url 
+  return url.startsWith("http://")
+    ? url.replace("http://", "https://")
+    : url.startsWith("//")
+      ? "https:" + url
       : url;
 };
 onMounted(async () => {
@@ -26,21 +25,39 @@ onMounted(async () => {
 <template>
   <HomePanel title="新鲜好物" subTitle="新鲜出炉 品质靠谱">
     <ul class="goods-list">
-      <li
-        v-for="item in newList"
-        :key="item.id"
-        v-if="!showSkeleton"
-        :class="{ 'fade-in': !showSkeleton }"
-      >
-        <RouterLink :to="`/detail/${item.id}`">
-          <img :src="secureImgUrl(item.picture)" alt="" />
-          <p class="name">{{ item.name }}</p>
-          <p class="price">&yen;{{ item.price }}</p>
-        </RouterLink>
-      </li>
-      <li v-for="i in 4" :key="i" v-else>
-        <SkeletonItem />
-      </li>
+      <template v-if="!showSkeleton">
+        <li v-for="item in newList" :key="item.id" :class="{ 'fade-in': !showSkeleton }">
+          <RouterLink :to="`/detail/${item.id}`">
+            <img :src="secureImgUrl(item.picture)" alt="" />
+            <p class="name">{{ item.name }}</p>
+            <p class="price">&yen;{{ item.price }}</p>
+          </RouterLink>
+        </li>
+      </template>
+      <template v-else>
+        <li v-for="i in 4" :key="i" class="skeleton-item">
+          <el-skeleton style="width: 100%; height: 100%" animated>
+            <template #template>
+              <div class="skeleton-content">
+                <el-skeleton-item
+                  variant="image"
+                  style="width: 306px; height: 306px; border-radius: 8px"
+                />
+                <div class="skeleton-text">
+                  <el-skeleton-item
+                    variant="text"
+                    style="width: 80%; height: 22px; margin: 12px auto 0"
+                  />
+                  <el-skeleton-item
+                    variant="text"
+                    style="width: 40%; height: 22px; margin: 8px auto 0"
+                  />
+                </div>
+              </div>
+            </template>
+          </el-skeleton>
+        </li>
+      </template>
     </ul>
   </HomePanel>
 </template>
@@ -82,6 +99,26 @@ onMounted(async () => {
     }
     .name {
       padding: 12px;
+    }
+  }
+
+  .skeleton-item {
+    background: #f0f9f4;
+
+    .skeleton-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    .skeleton-text {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 12px;
     }
   }
 }

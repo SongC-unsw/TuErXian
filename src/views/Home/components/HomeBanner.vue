@@ -55,10 +55,10 @@ const shouldShowSkeleton = computed(() => {
 // 确保所有图片URL使用HTTPS
 const secureImgUrl = (url) => {
   if (!url) return url;
-  return url.startsWith('http://') 
-    ? url.replace('http://', 'https://') 
-    : url.startsWith('//') 
-      ? 'https:' + url 
+  return url.startsWith("http://")
+    ? url.replace("http://", "https://")
+    : url.startsWith("//")
+      ? "https:" + url
       : url;
 };
 </script>
