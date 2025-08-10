@@ -39,6 +39,9 @@ export default defineConfig({
   ],
   build: {
     minify: "esbuild",
+    esbuild: {
+      drop: ["console", "debugger"],
+    },
     rollupOptions: {
       output: {
         chunkFileNames: "assets/js/[name]-[hash].js",
