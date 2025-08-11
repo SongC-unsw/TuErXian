@@ -2,6 +2,7 @@ import { ref, computed, onUnmounted } from "vue";
 import dayjs from "dayjs";
 export const useCountDown = () => {
   const time = ref(0);
+  let timer = null;
   // 格式化时间 分 秒
   const formatTime = computed(() => {
     return dayjs.unix(time.value).format("mm分ss秒");
@@ -9,7 +10,8 @@ export const useCountDown = () => {
   const start = (currTime) => {
     // 倒计时逻辑
     time.value = currTime;
-    const timer = setInterval(() => {
+    clearInterval(timer);
+    timer = setInterval(() => {
       time.value--;
       if (time.value <= 0) {
         clearInterval(timer);
@@ -17,7 +19,7 @@ export const useCountDown = () => {
     }, 1000);
   };
   onUnmounted(() => {
-    timer && clearInterval(timer);
+    if (timer) clearInterval(timer);
   });
   return { formatTime, start };
 };
